@@ -110,7 +110,7 @@
     .bio {
       font-size: 18px;
       text-align: center;
-      min-height: 30px;  /* Ensures the container stays the same height */
+      min-height: 30px;  /* Keeps the bio container height constant */
     }
     #bio-typing {
       color: black;
@@ -248,8 +248,7 @@
       transition: fill 0.3s ease;
     }
     #speaker-icon:hover { fill: #ffffff; }
-    /* --- Snow Animation (improved) --- */
-    /* We use a CSS variable --tx for the final horizontal translation */
+    /* --- Global Snow Animation (unchanged global snow) --- */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -266,10 +265,20 @@
         opacity: 1;
       }
       100% {
-        /* Translate vertically by 110vh and horizontally by a variable amount */
+        /* Using CSS variable --tx for horizontal drift */
         transform: translate(var(--tx), 110vh) rotate(360deg);
         opacity: 0.5;
       }
+    }
+    /* --- Cursor Snowflake Trail CSS --- */
+    .cursor-snowflake {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: url("https://clipart.info/images/ccovers/1559757990white-snowflake-png-19.png") no-repeat center center;
+      background-size: contain;
+      pointer-events: none;
+      will-change: transform;
     }
     /* Copy Popup */
     #copy-popup {
@@ -426,7 +435,7 @@
     }
     animateTilt();
 
-    // --- Improved Snow Animation ---
+    // --- Global Snow Animation (unchanged global snow) ---
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -436,10 +445,10 @@
       snowflake.style.height = `${size}px`;
       // Random horizontal start position
       snowflake.style.left = Math.random() * 100 + 'vw';
-      // Random final horizontal offset (wind effect): value between -50px (to left) and +30px (to right)
+      // Random final horizontal offset (wind effect): between -50px and +30px
       const finalX = Math.random() * 80 - 50; 
       snowflake.style.setProperty('--tx', finalX + 'px');
-      // Random animation duration between 4000ms and 7000ms (faster falling)
+      // Random animation duration between 4000ms and 7000ms
       const duration = Math.random() * 3000 + 4000;
       snowflake.style.animationDuration = duration + 'ms';
       // Random delay for varied appearance
@@ -451,8 +460,52 @@
         snowflake.remove();
       }, duration + delay);
     }
-    // Create a new snowflake every 200ms
     setInterval(createSnowflake, 200);
+
+    // --- Cursor Snowflake Trail Effect ---
+    (function() {
+      let prevX = null, prevY = null;
+      const cursorSnowflakes = [];
+      const snowflakeImageURL = "https://clipart.info/images/ccovers/1559757990white-snowflake-png-19.png";
+      function createCursorSnowflake(x, y, vx, vy) {
+        const el = document.createElement("div");
+        el.className = "cursor-snowflake";
+        el.style.left = x + "px";
+        el.style.top = y + "px";
+        document.body.appendChild(el);
+        cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, life: 0 });
+      }
+      function updateCursorSnowflakes() {
+        const dt = 1; // time step (adjust if needed)
+        const gravity = 0.5; // gravity acceleration
+        for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
+          const s = cursorSnowflakes[i];
+          s.vy += gravity * dt;
+          s.x += s.vx * dt;
+          s.y += s.vy * dt;
+          s.life += dt;
+          s.element.style.left = s.x + "px";
+          s.element.style.top = s.y + "px";
+          // Remove snowflake if it goes off-screen or lives too long
+          if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 200) {
+            s.element.remove();
+            cursorSnowflakes.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(updateCursorSnowflakes);
+      }
+      document.addEventListener("mousemove", function(e) {
+        if (prevX !== null && prevY !== null) {
+          const dx = e.clientX - prevX;
+          const dy = e.clientY - prevY;
+          // Create a snowflake at the cursor position with velocity proportional to the mouse movement
+          createCursorSnowflake(e.clientX, e.clientY, dx * 0.5, dy * 0.5);
+        }
+        prevX = e.clientX;
+        prevY = e.clientY;
+      });
+      updateCursorSnowflakes();
+    })();
 
     // Clipboard copy & popup function
     function copyUsername(username) {
