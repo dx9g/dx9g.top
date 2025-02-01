@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dx9g</title>
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
+  <style>
+    @font-face {
+      font-family: 'Aoki Regular';
+      src: url('Aoki Regular.otf') format('opentype');
+    }
+    /* Global font for the entire website */
+    * {
+      font-family: 'Aoki Regular', sans-serif;
+    }
+    /* Video background styles */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
+    /* Overlay with dark blur effect (on top until clicked) */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10005;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
+    }
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .overlay .message {
+      font-size: 48px;
+      color: #ffffff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    /* Centering container using Flexbox on the body */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+    /* Main container for content that tilts */
+    .main-container {
+      background: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
+      padding: 20px 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 3s ease-in-out;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      will-change: transform;
+      z-index: 10001;
+      position: relative;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* Title styling – centered */
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      color: #d3d3d3;
+      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
+      margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
+    }
+    /* Discord profile section */
+    .discord-profile {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    .discord-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .discord-decoration {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 80px;
+      pointer-events: none;
+    }
+    /* Bio text */
+    .bio {
+      font-size: 18px;
+      color: #c0c0c0;
+      max-width: 350px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    /* Social links as icons with tooltips */
+    .social-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .social-icon {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .social-icon img {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s;
+    }
+    .social-icon:hover img {
+      transform: scale(1.1);
+    }
+    /* Tooltip styling with grey-white gradient, positioned below with an arrow */
+    .social-icon .tooltip {
+      position: absolute;
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: linear-gradient(45deg, #cccccc, #ffffff);
+      color: #000;
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 10002;
+    }
+    .social-icon:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .social-icon .tooltip::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent transparent #cccccc transparent;
+      opacity: 0.8;
+    }
+    /* Star system container */
+    #star-system {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    #star-counter {
+      font-size: 24px;
+      font-weight: bold;
+      /* Color will be set dynamically */
+    }
+    #star-icon {
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    /* Smooth fill transition for the SVG star */
+    #star-svg {
+      transition: fill 0.3s ease;
+    }
+    /* Visitor Counter – bottom left of main container */
+    #visitor-counter {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 16px;
+      color: #c0c0c0;
+    }
+    #eye-icon {
+      width: 24px;
+      height: 24px;
+      fill: #c0c0c0;
+      transition: fill 0.3s ease;
+    }
+    #eye-icon:hover {
+      fill: #ffffff;
+    }
+    /* Music Control Panel in the top left corner */
+    #music-controls {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 10px;
+      z-index: 10000;
+    }
+    /* Volume Slider with transparent background and grey track */
+    #volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 120px;
+      height: 6px;
+      background: transparent;
+      outline: none;
+    }
+    /* WebKit track styling */
+    #volume-slider::-webkit-slider-runnable-track {
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
+    }
+    #volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+      margin-top: -5px;
+    }
+    #volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    /* Firefox track styling */
+    #volume-slider::-moz-range-track {
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
+    }
+    #volume-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    #volume-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+    }
+    /* Speaker Icon styling */
+    #speaker-icon {
+      width: 24px;
+      height: 24px;
+      fill: #808080;
+      transition: fill 0.3s ease;
+    }
+    #speaker-icon:hover {
+      fill: #ffffff;
+    }
+    /* Animated circles */
+    .circle {
+      position: fixed;
+      top: 100vh;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { top: 100vh; opacity: 0; }
+      20%  { opacity: 0.8; }
+      100% { top: -10vh; opacity: 0; }
+    }
+    /* Popup for copy-to-clipboard notification */
+    #copy-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: linear-gradient(45deg, #cccccc, #ffffff);
+      color: #000;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+      z-index: 10006;
+      text-align: center;
+      min-width: 200px;
+    }
+    #copy-popup.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    #copy-popup button {
+      background: none;
+      border: none;
+      color: #000;
+      font-size: 14px;
+      margin: 15px auto 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+    #copy-popup button .checkmark {
+      width: 20px;  /* Increased size */
+      height: 20px; /* Increased size */
+      fill: #808080;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background video -->
+  <video class="bg-video" autoplay muted loop>
+    <source src="https://r2.guns.lol/f4e3039c-7ac3-47c1-be9d-2535b1d68d52.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Music Control Panel -->
+  <div id="music-controls">
+    <svg id="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03z"/>
+      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+    </svg>
+    <input type="range" id="volume-slider" min="0" max="100" value="70">
+  </div>
+
+  <!-- Overlay (click to remove and activate sound) -->
+  <div class="overlay" id="overlay">
+    <div class="message">click</div>
+  </div>
+
+  <!-- Main container -->
+  <div class="main-container" id="main-container">
+    <div class="title">dx9g</div>
+    
+    <!-- Discord Profile Section -->
+    <div class="discord-profile">
+      <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/779454e09773e5508c8ef55d74be50f2.webp" alt="Discord Avatar">
+      <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
+    </div>
+
+    <!-- Bio -->
+    <div class="bio">
+      Leave a star under my profile!
+    </div>
+
+    <!-- Social links as icons with tooltips and clipboard functionality -->
+    <div class="social-links">
+      <div class="social-icon" id="discord-copy">
+        <img src="https://i.ibb.co/yGKy01d/toppng-com-discord-black-logo-800x800.png" alt="Discord">
+        <div class="tooltip">dx9g</div>
+      </div>
+      <div class="social-icon" id="github-copy">
+        <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+        <div class="tooltip">dx9g</div>
+      </div>
+      <div class="social-icon" id="roblox-copy">
+        <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
+        <div class="tooltip">acceptedapoIogies</div>
+      </div>
+    </div>
+
+    <!-- Star System -->
+    <div id="star-system">
+      <span id="star-counter">0</span>
+      <div id="star-icon">
+        <svg id="star-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#808080" width="32px" height="32px">
+          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Visitor Counter -->
+    <div id="visitor-counter">
+      <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#c0c0c0">
+        <path d="M12 4.5C7.305 4.5 3.06 7.25 1 12c2.06 4.75 6.305 7.5 11 7.5s8.94-2.75 11-7.5c-2.06-4.75-6.305-7.5-11-7.5zM12 17c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
+      </svg>
+      <span id="visitor-count">0</span>
+    </div>
+  </div>
+
+  <!-- Hidden Music Player -->
+  <div id="music-player" style="position: fixed; top: -9999px; left: -9999px; z-index: 999999;"></div>
+
+  <!-- Copy Popup for clipboard notification -->
+  <div id="copy-popup">
+    <div>Copied to clipboard</div>
+    <button id="copy-popup-close">
+      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+      </svg>
+      okay
+    </button>
+  </div>
+
+  <script>
+    // Overlay click: remove overlay and start music
+    const overlay = document.getElementById('overlay');
+    overlay.addEventListener('click', () => {
+      if (window.player && typeof window.player.playVideo === "function") {
+        window.player.unMute();
+        window.player.playVideo();
+      }
+      overlay.classList.add('hidden');
+      setTimeout(() => { overlay.remove(); }, 500);
+    });
+
+    // Tilt effect for main container
+    const mainContainer = document.getElementById('main-container');
+    let targetRotationX = 0, targetRotationY = 0;
+    let currentRotationX = 0, currentRotationY = 0;
+    const maxTilt = 10, dampening = 0.15;
+    mainContainer.addEventListener('mousemove', (e) => {
+      const rect = mainContainer.getBoundingClientRect();
+      const centerX = rect.width / 2, centerY = rect.height / 2;
+      const offsetX = (e.clientX - rect.left - centerX) / centerX;
+      const offsetY = (centerY - (e.clientY - rect.top)) / centerY;
+      targetRotationY = offsetX * maxTilt;
+      targetRotationX = offsetY * maxTilt;
+    });
+    mainContainer.addEventListener('mouseleave', () => {
+      targetRotationX = 0; targetRotationY = 0;
+    });
+    function animateTilt() {
+      currentRotationX += (targetRotationX - currentRotationX) * dampening;
+      currentRotationY += (targetRotationY - currentRotationY) * dampening;
+      mainContainer.style.transform = `rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
+      requestAnimationFrame(animateTilt);
+    }
+    animateTilt();
+
+    // Animated circles
+    function createCircle() {
+      const circle = document.createElement('div');
+      circle.classList.add('circle');
+      circle.style.left = Math.random() * 100 + 'vw';
+      const size = Math.random() * 20 + 10;
+      circle.style.width = size + 'px';
+      circle.style.height = size + 'px';
+      const duration = (Math.random() * 10 + 20) * 1000;
+      circle.style.animationDuration = duration + 'ms';
+      setTimeout(() => { circle.remove(); }, duration + 1000);
+      document.body.appendChild(circle);
+    }
+    let circleInterval = setInterval(createCircle, 200);
+    document.addEventListener("visibilitychange", function() {
+      if (document.hidden) {
+        clearInterval(circleInterval);
+      } else {
+        circleInterval = setInterval(createCircle, 200);
+      }
+    });
+
+    // Star system toggle with dynamic star count color
+    const starIcon = document.getElementById('star-icon');
+    const starCounter = document.getElementById('star-counter');
+    const starSVG = document.getElementById('star-svg');
+    if (!localStorage.getItem('starCount')) {
+      localStorage.setItem('starCount', "0");
+    }
+    starCounter.textContent = localStorage.getItem('starCount');
+    let starred = localStorage.getItem('starGiven') === 'true';
+    // Set star SVG fill and star count color based on starred state
+    starSVG.setAttribute('fill', starred ? '#ffffff' : '#808080');
+    starCounter.style.color = starred ? '#ffffff' : '#808080';
+    starIcon.addEventListener('click', () => {
+      let count = parseInt(localStorage.getItem('starCount'), 10);
+      if (!starred) {
+        count++;
+        localStorage.setItem('starCount', count.toString());
+        starCounter.textContent = count;
+        starSVG.setAttribute('fill', '#ffffff');
+        starIcon.style.transform = 'scale(1.2)';
+        starCounter.style.color = '#ffffff';
+        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
+        localStorage.setItem('starGiven', 'true');
+        starred = true;
+      } else {
+        count = Math.max(0, count - 1);
+        localStorage.setItem('starCount', count.toString());
+        starCounter.textContent = count;
+        starSVG.setAttribute('fill', '#808080');
+        starIcon.style.transform = 'scale(0.8)';
+        starCounter.style.color = '#808080';
+        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
+        localStorage.setItem('starGiven', 'false');
+        starred = false;
+      }
+    });
+
+    // Visitor count using CountAPI
+    const visitorCountEl = document.getElementById('visitor-count');
+    const namespace = 'dx9g-website', key = 'visitors';
+    if (!localStorage.getItem("visited")) {
+      fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+        .then(res => res.json())
+        .then(data => {
+          visitorCountEl.textContent = data.value;
+          localStorage.setItem("visited", "true");
+        })
+        .catch(() => { visitorCountEl.textContent = 'N/A'; });
+    } else {
+      fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+        .then(res => res.json())
+        .then(data => { visitorCountEl.textContent = data.value; })
+        .catch(() => { visitorCountEl.textContent = 'N/A'; });
+    }
+
+    // YouTube Music Player
+    var musicVideoLink = "https://www.youtube.com/watch?v=EdpsyzRIaTI";
+    function extractVideoId(url) {
+      var regex = /(?:\?v=|\/embed\/|\.be\/)([^&\n?#]+)/;
+      var match = url.match(regex);
+      return (match && match[1]) ? match[1] : "";
+    }
+    var videoId = extractVideoId(musicVideoLink);
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('music-player', {
+        height: '0',
+        width: '0',
+        videoId: videoId,
+        playerVars: {
+          'autoplay': 1,
+          'controls': 0,
+          'loop': 1,
+          'playlist': videoId,
+          'playsinline': 1
+        },
+        events: { 'onReady': onPlayerReady }
+      });
+    }
+    function onPlayerReady(event) {
+      event.target.setVolume(70);
+      event.target.unMute();
+      event.target.playVideo();
+    }
+    const volumeSlider = document.getElementById('volume-slider');
+    volumeSlider.addEventListener('input', function() {
+      const vol = parseInt(this.value, 10);
+      if (player && typeof player.setVolume === "function") {
+        player.setVolume(vol);
+      }
+    });
+
+    // Clipboard copy & popup function
+    function copyUsername(username) {
+      navigator.clipboard.writeText(username).then(() => {
+        copyPopup.classList.add("show");
+      }).catch(err => {
+        console.error("Failed to copy: ", err);
+      });
+    }
+    const copyPopup = document.getElementById('copy-popup');
+    const copyPopupClose = document.getElementById('copy-popup-close');
+    copyPopupClose.addEventListener('click', () => {
+      copyPopup.classList.remove("show");
+    });
+    // Attach clipboard copy events to each social icon
+    document.getElementById('discord-copy').addEventListener('click', () => {
+      copyUsername("dx9g");
+    });
+    document.getElementById('github-copy').addEventListener('click', () => {
+      copyUsername("dx9g");
+    });
+    document.getElementById('roblox-copy').addEventListener('click', () => {
+      copyUsername("acceptedapoIogies");
+    });
+  </script>
+</body>
+</html>
