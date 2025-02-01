@@ -354,7 +354,7 @@
   <script type="module">
     // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
     // Your Firebase configuration (as you provided)
     const firebaseConfig = {
@@ -402,18 +402,34 @@
       });
     }
 
-    // Only allow one star per visit (localStorage based)
+    // When a user clicks the star icon, we check their IP using ipify.
+    // If their IP has not been recorded under "star_ips", we increment the star count and record it.
     const starIcon = document.getElementById('star-icon');
     starIcon.addEventListener('click', async () => {
-      if (localStorage.getItem('starGiven') === 'true') {
-        // Already starred – do nothing (or optionally show a message)
-        return;
+      try {
+        // Fetch the client's public IP using ipify
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const userIP = ipData.ip;
+        
+        // Reference for this IP under the star_ips node
+        const ipRef = ref(db, "star_ips/" + userIP);
+        const snapshot = await get(ipRef);
+        
+        if (snapshot.exists()) {
+          // This IP has already added a star; do nothing (or optionally notify the user)
+          console.log("Star already given from IP:", userIP);
+          return;
+        }
+        
+        // Otherwise, increment the star count and record this IP
+        starIcon.style.transform = 'scale(1.2)';
+        await updateStars(1);
+        await set(ipRef, true);
+        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
+      } catch (err) {
+        console.error("Error processing star click:", err);
       }
-      // If not yet starred, increment the counter by 1.
-      starIcon.style.transform = 'scale(1.2)';
-      await updateStars(1);
-      localStorage.setItem('starGiven', 'true');
-      setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
     });
   </script>
 </body>
