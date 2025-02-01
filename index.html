@@ -110,7 +110,7 @@
     .bio {
       font-size: 18px;
       text-align: center;
-      min-height: 30px;  /* Keeps the bio container height constant */
+      min-height: 30px;
     }
     #bio-typing {
       color: black;
@@ -273,8 +273,8 @@
     /* --- Cursor Snowflake Trail CSS --- */
     .cursor-snowflake {
       position: fixed;
-      width: 10px;
-      height: 10px;
+      width: 15px;
+      height: 15px;
       background: url("https://clipart.info/images/ccovers/1559757990white-snowflake-png-19.png") no-repeat center center;
       background-size: contain;
       pointer-events: none;
@@ -466,7 +466,37 @@
     (function() {
       let prevX = null, prevY = null;
       const cursorSnowflakes = [];
-      const snowflakeImageURL = "https://clipart.info/images/ccovers/1559757990white-snowflake-png-19.png";
+      // When the mouse moves, create several snowflakes along a line behind the cursor.
+      document.addEventListener("mousemove", function(e) {
+        if (prevX !== null && prevY !== null) {
+          const dx = e.clientX - prevX;
+          const dy = e.clientY - prevY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > 0) {
+            // Normalize the direction vector of movement.
+            const ndx = dx / dist;
+            const ndy = dy / dist;
+            // Determine the number of snowflakes to create along the trail.
+            const count = 5;
+            const gap = 10; // spacing between snowflakes along the trail
+            for (let i = 0; i < count; i++) {
+              // Place snowflakes behind the current cursor position along the opposite of the movement.
+              let baseX = e.clientX - ndx * gap * i;
+              let baseY = e.clientY - ndy * gap * i;
+              // Add a small perpendicular random offset for a spread effect.
+              const perpX = -ndy;
+              const perpY = ndx;
+              const offset = (Math.random() - 0.5) * 10; // spread between -5 and +5 pixels
+              baseX += perpX * offset;
+              baseY += perpY * offset;
+              // Use a slightly larger size for these cursor snowflakes.
+              createCursorSnowflake(baseX, baseY, dx * 0.5, dy * 0.5);
+            }
+          }
+        }
+        prevX = e.clientX;
+        prevY = e.clientY;
+      });
       function createCursorSnowflake(x, y, vx, vy) {
         const el = document.createElement("div");
         el.className = "cursor-snowflake";
@@ -477,7 +507,7 @@
       }
       function updateCursorSnowflakes() {
         const dt = 1; // time step (adjust if needed)
-        const gravity = 0.5; // gravity acceleration
+        const gravity = 0.7; // gravity acceleration for a faster fall
         for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
           const s = cursorSnowflakes[i];
           s.vy += gravity * dt;
@@ -487,23 +517,13 @@
           s.element.style.left = s.x + "px";
           s.element.style.top = s.y + "px";
           // Remove snowflake if it goes off-screen or lives too long
-          if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 200) {
+          if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 150) {
             s.element.remove();
             cursorSnowflakes.splice(i, 1);
           }
         }
         requestAnimationFrame(updateCursorSnowflakes);
       }
-      document.addEventListener("mousemove", function(e) {
-        if (prevX !== null && prevY !== null) {
-          const dx = e.clientX - prevX;
-          const dy = e.clientY - prevY;
-          // Create a snowflake at the cursor position with velocity proportional to the mouse movement
-          createCursorSnowflake(e.clientX, e.clientY, dx * 0.5, dy * 0.5);
-        }
-        prevX = e.clientX;
-        prevY = e.clientY;
-      });
       updateCursorSnowflakes();
     })();
 
