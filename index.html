@@ -13,9 +13,9 @@
       src: url('Aoki Regular.otf') format('opentype');
     }
     * { font-family: 'Aoki Regular', sans-serif; }
-    /* Set the custom cursor for the entire page */
+    /* Set the custom cursor for the entire page with centered hotspot (assumes 32x32 image) */
     body, * {
-      cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png'), auto;
+      cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') 16 16, auto;
     }
     .bg-video {
       position: fixed;
@@ -375,8 +375,8 @@
     </div>
   </div>
 
-  <!-- Hidden Music Player -->
-  <div id="music-player" style="position: fixed; top: -9999px; left: -9999px; z-index: 999999;"></div>
+  <!-- Hidden Background Music (new sound) -->
+  <audio id="background-music" src="https://r2.guns.lol/485f546f-9723-4220-9a7c-b255ea48e5b7.mp3" loop></audio>
 
   <!-- Copy Popup -->
   <div id="copy-popup">
@@ -391,18 +391,18 @@
 
   <!-- === JavaScript for Other Effects === -->
   <script>
-    // Overlay click: remove overlay and start music
+    // Overlay click: remove overlay and start background music
     const overlay = document.getElementById('overlay');
     overlay.addEventListener('click', () => {
-      if (window.player && typeof window.player.playVideo === "function") {
-        window.player.unMute();
-        window.player.playVideo();
-      }
+      const bgMusic = document.getElementById('background-music');
+      // Set volume based on the slider's value (0-1 scale)
+      bgMusic.volume = document.getElementById('volume-slider').value / 100;
+      bgMusic.play();
       overlay.classList.add('hidden');
       setTimeout(() => { overlay.remove(); }, 500);
     });
 
-    // Tilt effect for main container (using template literals)
+    // Tilt effect for main container
     const mainContainer = document.getElementById('main-container');
     let targetRotationX = 0, targetRotationY = 0;
     let currentRotationX = 0, currentRotationY = 0;
@@ -439,7 +439,7 @@
       // Random final horizontal offset (wind effect): value between -50px (to left) and +30px (to right)
       const finalX = Math.random() * 80 - 50; 
       snowflake.style.setProperty('--tx', finalX + 'px');
-      // Random animation duration between 4000ms and 7000ms (faster falling)
+      // Random animation duration between 4000ms and 7000ms
       const duration = Math.random() * 3000 + 4000;
       snowflake.style.animationDuration = duration + 'ms';
       // Random delay for varied appearance
@@ -470,44 +470,13 @@
     document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
 
-    // YouTube Music Player
-    var musicVideoLink = "https://www.youtube.com/watch?v=EdpsyzRIaTI";
-    function extractVideoId(url) {
-      var regex = /(?:\?v=|\/embed\/|\.be\/)([^&\n?#]+)/;
-      var match = url.match(regex);
-      return (match && match[1]) ? match[1] : "";
-    }
-    var videoId = extractVideoId(musicVideoLink);
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    var player;
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('music-player', {
-        height: '0',
-        width: '0',
-        videoId: videoId,
-        playerVars: {
-          'autoplay': 1,
-          'controls': 0,
-          'loop': 1,
-          'playlist': videoId,
-          'playsinline': 1
-        },
-        events: { 'onReady': onPlayerReady }
-      });
-    }
-    function onPlayerReady(event) {
-      event.target.setVolume(70);
-      event.target.unMute();
-      event.target.playVideo();
-    }
+    // Volume slider controls the background music volume
     const volumeSlider = document.getElementById('volume-slider');
     volumeSlider.addEventListener('input', function() {
-      const vol = parseInt(this.value, 10);
-      if (player && typeof player.setVolume === "function") {
-        player.setVolume(vol);
+      const vol = parseInt(this.value, 10) / 100;
+      const bgMusic = document.getElementById('background-music');
+      if(bgMusic) {
+        bgMusic.volume = vol;
       }
     });
   </script>
@@ -516,7 +485,7 @@
   <script type="module">
     // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
     // Your Firebase configuration
     const firebaseConfig = {
