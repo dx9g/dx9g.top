@@ -204,6 +204,7 @@
     <div id="star-system">
       <span id="star-counter">0</span>
       <div id="star-icon">
+        <!-- The star SVG initially has a gray fill (#808080). When clicked, the JavaScript below changes it to white. -->
         <svg id="star-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#808080" width="32px" height="32px">
           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
         </svg>
@@ -246,7 +247,7 @@
       setTimeout(() => { overlay.remove(); }, 500);
     });
 
-    // Tilt effect for main container (fixed using template literals)
+    // Tilt effect for main container (using template literals)
     const mainContainer = document.getElementById('main-container');
     let targetRotationX = 0, targetRotationY = 0;
     let currentRotationX = 0, currentRotationY = 0;
@@ -354,9 +355,9 @@
   <script type="module">
     // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-    // Your Firebase configuration (as you provided)
+    // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA-faGgVBFXHFVjzOV0n6rKAibDTYUoYm0",
       authDomain: "dx9g-ce4b8.firebaseapp.com",
@@ -374,14 +375,12 @@
 
     // --- Views Counter ---
     const viewsRef = ref(db, "views");
-    // Check localStorage: if no view has been counted for this visit, count it and mark as counted.
     if (!localStorage.getItem('viewCounted')) {
       runTransaction(viewsRef, (currentViews) => {
         return (currentViews || 0) + 1;
       });
       localStorage.setItem('viewCounted', 'true');
     }
-    // Listen for real-time updates on views and update UI
     onValue(viewsRef, (snapshot) => {
       const views = snapshot.val() || 0;
       document.getElementById("visitor-count").textContent = views;
@@ -389,47 +388,30 @@
 
     // --- Stars Counter ---
     const starsRef = ref(db, "stars");
-    // Listen for real-time updates on stars and update UI
     onValue(starsRef, (snapshot) => {
       const stars = snapshot.val() || 0;
       document.getElementById("star-counter").textContent = stars;
     });
 
-    // Function to update stars counter by a delta (only adding allowed)
+    // Function to update stars counter by adding delta
     async function updateStars(delta) {
       await runTransaction(starsRef, (currentStars) => {
         return (currentStars || 0) + delta;
       });
     }
 
-    // When a user clicks the star icon, we check their IP using ipify.
-    // If their IP has not been recorded under "star_ips", we increment the star count and record it.
+    // When a user clicks the star icon, update the counter and change the icon color
     const starIcon = document.getElementById('star-icon');
+    const starSvg = document.getElementById('star-svg');
     starIcon.addEventListener('click', async () => {
-      try {
-        // Fetch the client's public IP using ipify
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        const ipData = await ipResponse.json();
-        const userIP = ipData.ip;
-        
-        // Reference for this IP under the star_ips node
-        const ipRef = ref(db, "star_ips/" + userIP);
-        const snapshot = await get(ipRef);
-        
-        if (snapshot.exists()) {
-          // This IP has already added a star; do nothing (or optionally notify the user)
-          console.log("Star already given from IP:", userIP);
-          return;
-        }
-        
-        // Otherwise, increment the star count and record this IP
-        starIcon.style.transform = 'scale(1.2)';
-        await updateStars(1);
-        await set(ipRef, true);
-        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
-      } catch (err) {
-        console.error("Error processing star click:", err);
-      }
+      // Animate the star (scale up briefly)
+      starIcon.style.transform = 'scale(1.2)';
+      // Change the star's fill color to white
+      starSvg.style.fill = '#ffffff';
+      // Increment the stars counter by 1
+      await updateStars(1);
+      // Return the star icon to its normal size after a short delay
+      setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
     });
   </script>
 </body>
