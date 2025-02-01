@@ -246,7 +246,7 @@
       setTimeout(() => { overlay.remove(); }, 500);
     });
 
-    // Tilt effect for main container
+    // Tilt effect for main container (fixed using template literals)
     const mainContainer = document.getElementById('main-container');
     let targetRotationX = 0, targetRotationY = 0;
     let currentRotationX = 0, currentRotationY = 0;
@@ -374,10 +374,13 @@
 
     // --- Views Counter ---
     const viewsRef = ref(db, "views");
-    // Increment views on page load
-    runTransaction(viewsRef, (currentViews) => {
-      return (currentViews || 0) + 1;
-    });
+    // Check localStorage: if no view has been counted for this visit, count it and mark as counted.
+    if (!localStorage.getItem('viewCounted')) {
+      runTransaction(viewsRef, (currentViews) => {
+        return (currentViews || 0) + 1;
+      });
+      localStorage.setItem('viewCounted', 'true');
+    }
     // Listen for real-time updates on views and update UI
     onValue(viewsRef, (snapshot) => {
       const views = snapshot.val() || 0;
@@ -392,30 +395,24 @@
       document.getElementById("star-counter").textContent = stars;
     });
 
-    // Function to update stars counter by a delta (e.g., +1 or -1)
+    // Function to update stars counter by a delta (only adding allowed)
     async function updateStars(delta) {
       await runTransaction(starsRef, (currentStars) => {
         return (currentStars || 0) + delta;
       });
     }
 
+    // Only allow one star per visit (localStorage based)
     const starIcon = document.getElementById('star-icon');
-    let userStarred = localStorage.getItem('starGiven') === 'true';
-
     starIcon.addEventListener('click', async () => {
-      let delta = 0;
-      if (!userStarred) {
-        delta = 1;
-        starIcon.style.transform = 'scale(1.2)';
-        localStorage.setItem('starGiven', 'true');
-        userStarred = true;
-      } else {
-        delta = -1;
-        starIcon.style.transform = 'scale(0.8)';
-        localStorage.setItem('starGiven', 'false');
-        userStarred = false;
+      if (localStorage.getItem('starGiven') === 'true') {
+        // Already starred – do nothing (or optionally show a message)
+        return;
       }
-      await updateStars(delta);
+      // If not yet starred, increment the counter by 1.
+      starIcon.style.transform = 'scale(1.2)';
+      await updateStars(1);
+      localStorage.setItem('starGiven', 'true');
       setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
     });
   </script>
