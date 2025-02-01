@@ -472,22 +472,16 @@
           const dy = e.clientY - prevY;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist > 0) {
-            // Interpolate along the path
+            // Interpolate along the path.
             const count = Math.max(1, Math.floor(dist / 10));
             const ndx = dx / dist;
             const ndy = dy / dist;
             for (let i = 0; i < count; i++) {
               const fraction = i / count;
-              // Start from prevX,prevY and interpolate to current position.
+              // Interpolate from the previous to current position.
               let baseX = prevX + fraction * dx;
               let baseY = prevY + fraction * dy;
-              // Apply a small perpendicular offset initially.
-              const perpX = -ndy;
-              const perpY = ndx;
-              const offset = (Math.random() - 0.5) * 5; // small initial offset
-              baseX += perpX * offset;
-              baseY += perpY * offset;
-              // Create a cursor snowflake with initial velocity proportional to mouse movement.
+              // No initial perpendicular offset (to start centered).
               createCursorSnowflake(baseX, baseY, dx * 0.4, dy * 0.4);
             }
           }
@@ -498,19 +492,19 @@
       function createCursorSnowflake(x, y, vx, vy) {
         const el = document.createElement("div");
         el.className = "cursor-snowflake";
-        el.style.left = x + "px";
-        el.style.top = y + "px";
+        // Center the snowflake on the cursor (subtract half its width/height)
+        el.style.left = (x - 7.5) + "px";
+        el.style.top = (y - 7.5) + "px";
         document.body.appendChild(el);
-        // Assign an additional spread acceleration (randomized) that will increase horizontal displacement over time.
-        const spreadAccel = (Math.random() - 0.5) * 0.2; // between -0.1 and 0.1
+        // Assign a small random spread acceleration.
+        const spreadAccel = (Math.random() - 0.5) * 0.2;
         cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, spreadAccel: spreadAccel, life: 0 });
       }
       function updateCursorSnowflakes() {
         const dt = 1; // time step
-        const gravity = 0.7; // gravity acceleration for faster fall
+        const gravity = 0.3; // reduced gravity for slower falling
         for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
           const s = cursorSnowflakes[i];
-          // Increase horizontal velocity gradually using spread acceleration.
           s.vx += s.spreadAccel * dt;
           s.vy += gravity * dt;
           s.x += s.vx * dt;
@@ -518,7 +512,6 @@
           s.life += dt;
           s.element.style.left = s.x + "px";
           s.element.style.top = s.y + "px";
-          // Remove snowflake if off-screen or too old.
           if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 150) {
             s.element.remove();
             cursorSnowflakes.splice(i, 1);
@@ -540,7 +533,6 @@
     const copyPopup = document.getElementById('copy-popup');
     const copyPopupClose = document.getElementById('copy-popup-close');
     copyPopupClose.addEventListener('click', () => { copyPopup.classList.remove("show"); });
-    // Attach clipboard copy events to social icons.
     document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
@@ -589,11 +581,9 @@
 
   <!-- === Firebase Realtime Database Integration for Views === -->
   <script type="module">
-    // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
-    // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA-faGgVBFXHFVjzOV0n6rKAibDTYUoYm0",
       authDomain: "dx9g-ce4b8.firebaseapp.com",
@@ -605,11 +595,9 @@
       measurementId: "G-JXZ5KSV7LX"
     };
 
-    // Initialize Firebase
     const fbApp = initializeApp(firebaseConfig);
     const db = getDatabase(fbApp);
 
-    // --- Views Counter ---
     const viewsRef = ref(db, "views");
     if (!localStorage.getItem('viewCounted')) {
       runTransaction(viewsRef, (currentViews) => {
@@ -634,7 +622,6 @@
         if (!deleting) {
           currentIndex++;
           if (currentIndex > fullText.length) {
-            // Pause at full text before deleting
             setTimeout(() => {
               deleting = true;
               updateTitle();
@@ -644,7 +631,6 @@
         } else {
           currentIndex--;
           if (currentIndex < 0) {
-            // Pause before typing again
             deleting = false;
             setTimeout(updateTitle, 500);
             return;
@@ -669,7 +655,6 @@
         if (!deleting) {
           currentIndex++;
           if (currentIndex > fullText.length) {
-            // Pause at full text before deleting
             setTimeout(() => {
               deleting = true;
               updateBio();
