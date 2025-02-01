@@ -110,7 +110,7 @@
     .bio {
       font-size: 18px;
       text-align: center;
-      min-height: 30px;
+      min-height: 30px;  /* Ensures the container stays the same height */
     }
     #bio-typing {
       color: black;
@@ -248,7 +248,8 @@
       transition: fill 0.3s ease;
     }
     #speaker-icon:hover { fill: #ffffff; }
-    /* --- Global Snow Animation (unchanged global snow) --- */
+    /* --- Snow Animation (improved) --- */
+    /* We use a CSS variable --tx for the final horizontal translation */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -265,20 +266,10 @@
         opacity: 1;
       }
       100% {
-        /* Using CSS variable --tx for horizontal drift */
+        /* Translate vertically by 110vh and horizontally by a variable amount */
         transform: translate(var(--tx), 110vh) rotate(360deg);
         opacity: 0.5;
       }
-    }
-    /* --- Cursor Snowflake Trail CSS --- */
-    .cursor-snowflake {
-      position: fixed;
-      width: 15px;
-      height: 15px;
-      background: url("https://clipart.info/images/ccovers/1559757990white-snowflake-png-19.png") no-repeat center center;
-      background-size: contain;
-      pointer-events: none;
-      will-change: transform;
     }
     /* Copy Popup */
     #copy-popup {
@@ -435,7 +426,7 @@
     }
     animateTilt();
 
-    // --- Global Snow Animation (unchanged global snow) ---
+    // --- Improved Snow Animation ---
     function createSnowflake() {
       const snowflake = document.createElement('div');
       snowflake.classList.add('snowflake');
@@ -445,10 +436,10 @@
       snowflake.style.height = `${size}px`;
       // Random horizontal start position
       snowflake.style.left = Math.random() * 100 + 'vw';
-      // Random final horizontal offset (wind effect): between -50px and +30px
+      // Random final horizontal offset (wind effect): value between -50px (to left) and +30px (to right)
       const finalX = Math.random() * 80 - 50; 
       snowflake.style.setProperty('--tx', finalX + 'px');
-      // Random animation duration between 4000ms and 7000ms
+      // Random animation duration between 4000ms and 7000ms (faster falling)
       const duration = Math.random() * 3000 + 4000;
       snowflake.style.animationDuration = duration + 'ms';
       // Random delay for varied appearance
@@ -460,67 +451,8 @@
         snowflake.remove();
       }, duration + delay);
     }
+    // Create a new snowflake every 200ms
     setInterval(createSnowflake, 200);
-
-    // --- Improved Cursor Snowflake Trail Effect ---
-    (function() {
-      let prevX = null, prevY = null;
-      const cursorSnowflakes = [];
-      document.addEventListener("mousemove", function(e) {
-        if (prevX !== null && prevY !== null) {
-          const dx = e.clientX - prevX;
-          const dy = e.clientY - prevY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist > 0) {
-            // Interpolate along the path.
-            const count = Math.max(1, Math.floor(dist / 10));
-            const ndx = dx / dist;
-            const ndy = dy / dist;
-            for (let i = 0; i < count; i++) {
-              const fraction = i / count;
-              // Interpolate from the previous to current position.
-              let baseX = prevX + fraction * dx;
-              let baseY = prevY + fraction * dy;
-              // No initial perpendicular offset (to start centered).
-              createCursorSnowflake(baseX, baseY, dx * 0.4, dy * 0.4);
-            }
-          }
-        }
-        prevX = e.clientX;
-        prevY = e.clientY;
-      });
-      function createCursorSnowflake(x, y, vx, vy) {
-        const el = document.createElement("div");
-        el.className = "cursor-snowflake";
-        // Center the snowflake on the cursor (subtract half its width/height)
-        el.style.left = (x - 7.5) + "px";
-        el.style.top = (y - 7.5) + "px";
-        document.body.appendChild(el);
-        // Assign a small random spread acceleration.
-        const spreadAccel = (Math.random() - 0.5) * 0.2;
-        cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, spreadAccel: spreadAccel, life: 0 });
-      }
-      function updateCursorSnowflakes() {
-        const dt = 1; // time step
-        const gravity = 0.3; // reduced gravity for slower falling
-        for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
-          const s = cursorSnowflakes[i];
-          s.vx += s.spreadAccel * dt;
-          s.vy += gravity * dt;
-          s.x += s.vx * dt;
-          s.y += s.vy * dt;
-          s.life += dt;
-          s.element.style.left = s.x + "px";
-          s.element.style.top = s.y + "px";
-          if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 150) {
-            s.element.remove();
-            cursorSnowflakes.splice(i, 1);
-          }
-        }
-        requestAnimationFrame(updateCursorSnowflakes);
-      }
-      updateCursorSnowflakes();
-    })();
 
     // Clipboard copy & popup function
     function copyUsername(username) {
@@ -533,6 +465,7 @@
     const copyPopup = document.getElementById('copy-popup');
     const copyPopupClose = document.getElementById('copy-popup-close');
     copyPopupClose.addEventListener('click', () => { copyPopup.classList.remove("show"); });
+    // Attach clipboard copy events to social icons
     document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
@@ -581,9 +514,11 @@
 
   <!-- === Firebase Realtime Database Integration for Views === -->
   <script type="module">
+    // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
+    // Your Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyA-faGgVBFXHFVjzOV0n6rKAibDTYUoYm0",
       authDomain: "dx9g-ce4b8.firebaseapp.com",
@@ -595,9 +530,11 @@
       measurementId: "G-JXZ5KSV7LX"
     };
 
+    // Initialize Firebase
     const fbApp = initializeApp(firebaseConfig);
     const db = getDatabase(fbApp);
 
+    // --- Views Counter ---
     const viewsRef = ref(db, "views");
     if (!localStorage.getItem('viewCounted')) {
       runTransaction(viewsRef, (currentViews) => {
@@ -622,6 +559,7 @@
         if (!deleting) {
           currentIndex++;
           if (currentIndex > fullText.length) {
+            // Pause at full text before deleting
             setTimeout(() => {
               deleting = true;
               updateTitle();
@@ -631,6 +569,7 @@
         } else {
           currentIndex--;
           if (currentIndex < 0) {
+            // Pause before typing again
             deleting = false;
             setTimeout(updateTitle, 500);
             return;
@@ -655,6 +594,7 @@
         if (!deleting) {
           currentIndex++;
           if (currentIndex > fullText.length) {
+            // Pause at full text before deleting
             setTimeout(() => {
               deleting = true;
               updateBio();
