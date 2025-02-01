@@ -462,35 +462,35 @@
     }
     setInterval(createSnowflake, 200);
 
-    // --- Cursor Snowflake Trail Effect ---
+    // --- Improved Cursor Snowflake Trail Effect ---
     (function() {
       let prevX = null, prevY = null;
       const cursorSnowflakes = [];
-      // When the mouse moves, create several snowflakes along a line behind the cursor.
+      // On each mouse move, interpolate along the path between the previous and current positions.
       document.addEventListener("mousemove", function(e) {
         if (prevX !== null && prevY !== null) {
           const dx = e.clientX - prevX;
           const dy = e.clientY - prevY;
           const dist = Math.sqrt(dx * dx + dy * dy);
+          // If the mouse moved, interpolate along the path.
           if (dist > 0) {
-            // Normalize the direction vector of movement.
+            const count = Math.max(1, Math.floor(dist / 10));
+            // Normalize the movement vector.
             const ndx = dx / dist;
             const ndy = dy / dist;
-            // Determine the number of snowflakes to create along the trail.
-            const count = 5;
-            const gap = 10; // spacing between snowflakes along the trail
             for (let i = 0; i < count; i++) {
-              // Place snowflakes behind the current cursor position along the opposite of the movement.
-              let baseX = e.clientX - ndx * gap * i;
-              let baseY = e.clientY - ndy * gap * i;
-              // Add a small perpendicular random offset for a spread effect.
+              const fraction = i / count;
+              // Start at the previous position and move toward the current position.
+              let baseX = prevX + fraction * dx;
+              let baseY = prevY + fraction * dy;
+              // Add a slight perpendicular offset (spread) that increases with fraction.
               const perpX = -ndy;
               const perpY = ndx;
-              const offset = (Math.random() - 0.5) * 10; // spread between -5 and +5 pixels
+              const offset = (Math.random() - 0.5) * 10 * fraction;
               baseX += perpX * offset;
               baseY += perpY * offset;
-              // Use a slightly larger size for these cursor snowflakes.
-              createCursorSnowflake(baseX, baseY, dx * 0.5, dy * 0.5);
+              // Create a snowflake at this interpolated position.
+              createCursorSnowflake(baseX, baseY, dx * 0.4, dy * 0.4);
             }
           }
         }
@@ -506,8 +506,8 @@
         cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, life: 0 });
       }
       function updateCursorSnowflakes() {
-        const dt = 1; // time step (adjust if needed)
-        const gravity = 0.7; // gravity acceleration for a faster fall
+        const dt = 1; // time step
+        const gravity = 0.7; // gravity acceleration for faster fall
         for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
           const s = cursorSnowflakes[i];
           s.vy += gravity * dt;
@@ -516,7 +516,7 @@
           s.life += dt;
           s.element.style.left = s.x + "px";
           s.element.style.top = s.y + "px";
-          // Remove snowflake if it goes off-screen or lives too long
+          // Remove snowflake if it goes off-screen or lives too long.
           if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 150) {
             s.element.remove();
             cursorSnowflakes.splice(i, 1);
@@ -538,7 +538,7 @@
     const copyPopup = document.getElementById('copy-popup');
     const copyPopupClose = document.getElementById('copy-popup-close');
     copyPopupClose.addEventListener('click', () => { copyPopup.classList.remove("show"); });
-    // Attach clipboard copy events to social icons
+    // Attach clipboard copy events to social icons.
     document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
