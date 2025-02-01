@@ -355,7 +355,7 @@
   <script type="module">
     // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+    import { getDatabase, ref, runTransaction, onValue, get, set } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
 
     // Your Firebase configuration
     const firebaseConfig = {
@@ -400,18 +400,38 @@
       });
     }
 
-    // When a user clicks the star icon, update the counter and change the icon color
+    // When a user clicks the star icon, check their IP and allow only one star per IP.
     const starIcon = document.getElementById('star-icon');
     const starSvg = document.getElementById('star-svg');
     starIcon.addEventListener('click', async () => {
-      // Animate the star (scale up briefly)
-      starIcon.style.transform = 'scale(1.2)';
-      // Change the star's fill color to white
-      starSvg.style.fill = '#ffffff';
-      // Increment the stars counter by 1
-      await updateStars(1);
-      // Return the star icon to its normal size after a short delay
-      setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
+      try {
+        // Fetch the client's public IP using ipify
+        const ipResponse = await fetch("https://api.ipify.org?format=json");
+        const ipData = await ipResponse.json();
+        const userIP = ipData.ip;
+        
+        // Reference for this IP under the star_ips node
+        const ipRef = ref(db, "star_ips/" + userIP);
+        const snapshot = await get(ipRef);
+        
+        if (snapshot.exists()) {
+          // This IP has already given a star; do nothing.
+          console.log("Star already given from IP:", userIP);
+          return;
+        }
+        
+        // Animate the star (scale up briefly) and change its fill color to white
+        starIcon.style.transform = 'scale(1.2)';
+        starSvg.style.fill = '#ffffff';
+        // Increment the stars counter by 1
+        await updateStars(1);
+        // Record this IP in the database so no further star is allowed from this IP
+        await set(ipRef, true);
+        // Reset the star icon's scale after a short delay
+        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
+      } catch (err) {
+        console.error("Error processing star click:", err);
+      }
     });
   </script>
 </body>
