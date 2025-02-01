@@ -13,6 +13,10 @@
       src: url('Aoki Regular.otf') format('opentype');
     }
     * { font-family: 'Aoki Regular', sans-serif; }
+    /* Set the custom cursor for the entire page */
+    body, * {
+      cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png'), auto;
+    }
     .bg-video {
       position: fixed;
       top: 0;
@@ -34,7 +38,6 @@
       align-items: center;
       justify-content: center;
       z-index: 10005;
-      cursor: pointer;
       transition: opacity 0.5s ease;
     }
     .overlay.hidden { opacity: 0; pointer-events: none; }
@@ -103,27 +106,14 @@
       height: 80px;
       pointer-events: none;
     }
-    /* --- Updated Bio with Typing Animation --- */
+    /* --- Updated Bio with Typing Animation (cursor element removed) --- */
     .bio {
       font-size: 18px;
       text-align: center;
-      /* Keeping the container background intact; the animated text will be black */
     }
     #bio-typing {
       color: black;
       font-size: 24px;
-    }
-    #typing-cursor {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      background: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') no-repeat center center;
-      background-size: contain;
-      margin-left: 5px;
-      animation: blink 1s step-start infinite;
-    }
-    @keyframes blink {
-      50% { opacity: 0; }
     }
     .social-links {
       display: flex;
@@ -355,7 +345,6 @@
     <!-- Bio with Typing Animation -->
     <div class="bio">
       <span id="bio-typing"></span>
-      <span id="typing-cursor"></span>
     </div>
 
     <!-- Social Links -->
