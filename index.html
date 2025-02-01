@@ -6,340 +6,147 @@
   <title>dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
+    /* === Your CSS (unchanged) === */
     @font-face {
       font-family: 'Aoki Regular';
       src: url('Aoki Regular.otf') format('opentype');
     }
-    /* Global font for the entire website */
-    * {
-      font-family: 'Aoki Regular', sans-serif;
-    }
-    /* Video background styles */
-    .bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 100vw;
-      min-height: 100vh;
-      object-fit: cover;
-      z-index: -2;
-    }
-    /* Overlay with dark blur effect (on top until clicked) */
+    * { font-family: 'Aoki Regular', sans-serif; }
+    .bg-video { position: fixed; top: 0; left: 0; min-width: 100vw; min-height: 100vh; object-fit: cover; z-index: -2; }
     .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10005;
-      cursor: pointer;
-      transition: opacity 0.5s ease;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10005; cursor: pointer; transition: opacity 0.5s ease;
     }
-    .overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .overlay .message {
-      font-size: 48px;
-      color: #ffffff;
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-    }
-    /* Centering container using Flexbox on the body */
+    .overlay.hidden { opacity: 0; pointer-events: none; }
+    .overlay .message { font-size: 48px; color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
     body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      overflow: hidden;
-      position: relative;
+      margin: 0; padding: 0; height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      color: white; overflow: hidden; position: relative;
     }
-    /* Main container for content that tilts */
     .main-container {
       background: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
-      padding: 20px 30px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
-      width: 600px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeIn 3s ease-in-out;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      will-change: transform;
-      z-index: 10001;
-      position: relative;
+      padding: 20px 30px; border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+      width: 600px; display: flex; flex-direction: column;
+      align-items: center; animation: fadeIn 3s ease-in-out;
+      transform-style: preserve-3d; perspective: 1000px;
+      will-change: transform; z-index: 10001; position: relative;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    /* Title styling – centered */
-    .title {
-      font-size: 32px;
-      font-weight: 600;
-      color: #d3d3d3;
-      text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.1);
-      margin-bottom: 20px;
-      text-align: center;
-      width: 100%;
-    }
-    /* Discord profile section */
-    .discord-profile {
-      position: relative;
-      width: 80px;
-      height: 80px;
-      margin-bottom: 15px;
-    }
-    .discord-avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-    .discord-decoration {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 80px;
-      height: 80px;
-      pointer-events: none;
-    }
-    /* Bio text */
-    .bio {
-      font-size: 18px;
-      color: #c0c0c0;
-      max-width: 350px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    /* Social links as icons with tooltips */
-    .social-links {
-      display: flex;
-      gap: 20px;
-      align-items: center;
-      justify-content: center;
-      margin-top: 20px;
-    }
-    .social-icon {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
-    .social-icon img {
-      width: 40px;
-      height: 40px;
-      transition: transform 0.3s;
-    }
-    .social-icon:hover img {
-      transform: scale(1.1);
-    }
-    /* Tooltip styling with grey-white gradient, positioned below with an arrow */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .title { font-size: 32px; font-weight: 600; color: #d3d3d3;
+             text-shadow: 2px 2px 4px rgba(255,255,255,0.1);
+             margin-bottom: 20px; text-align: center; width: 100%; }
+    .discord-profile { position: relative; width: 80px; height: 80px; margin-bottom: 15px; }
+    .discord-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+    .discord-decoration { position: absolute; top: 0; left: 0; width: 80px; height: 80px; pointer-events: none; }
+    .bio { font-size: 18px; color: #c0c0c0; max-width: 350px; margin-bottom: 20px; text-align: center; }
+    .social-links { display: flex; gap: 20px; align-items: center; justify-content: center; margin-top: 20px; }
+    .social-icon { position: relative; display: inline-block; cursor: pointer; }
+    .social-icon img { width: 40px; height: 40px; transition: transform 0.3s; }
+    .social-icon:hover img { transform: scale(1.1); }
     .social-icon .tooltip {
-      position: absolute;
-      top: 110%;
-      left: 50%;
+      position: absolute; top: 110%; left: 50%;
       transform: translateX(-50%) translateY(10px);
       background: linear-gradient(45deg, #cccccc, #ffffff);
-      color: #000;
-      padding: 3px 7px;
-      border-radius: 5px;
-      font-size: 10px;
-      white-space: nowrap;
-      opacity: 0;
-      pointer-events: none;
+      color: #000; padding: 3px 7px; border-radius: 5px;
+      font-size: 10px; white-space: nowrap;
+      opacity: 0; pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
       z-index: 10002;
     }
     .social-icon:hover .tooltip {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+      opacity: 1; transform: translateX(-50%) translateY(0);
     }
     .social-icon .tooltip::before {
       content: "";
-      position: absolute;
-      top: -5px;
-      left: 50%;
+      position: absolute; top: -5px; left: 50%;
       transform: translateX(-50%);
-      border-width: 5px;
-      border-style: solid;
+      border-width: 5px; border-style: solid;
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
-    /* Star system container */
-    #star-system {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    #star-counter {
-      font-size: 24px;
-      font-weight: bold;
-      /* Color will be set dynamically */
-    }
-    #star-icon {
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    /* Smooth fill transition for the SVG star */
-    #star-svg {
-      transition: fill 0.3s ease;
-    }
-    /* Visitor Counter – bottom left of main container */
+    /* Star system styles */
+    #star-system { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
+    #star-counter { font-size: 24px; font-weight: bold; }
+    #star-icon { cursor: pointer; transition: transform 0.3s ease; }
+    #star-svg { transition: fill 0.3s ease; }
+    /* Visitor counter */
     #visitor-counter {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 16px;
-      color: #c0c0c0;
+      position: absolute; bottom: 10px; left: 10px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 16px; color: #c0c0c0;
     }
-    #eye-icon {
-      width: 24px;
-      height: 24px;
-      fill: #c0c0c0;
-      transition: fill 0.3s ease;
-    }
-    #eye-icon:hover {
-      fill: #ffffff;
-    }
-    /* Music Control Panel in the top left corner */
+    #eye-icon { width: 24px; height: 24px; fill: #c0c0c0; transition: fill 0.3s ease; }
+    #eye-icon:hover { fill: #ffffff; }
+    /* Music control panel */
     #music-controls {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: transparent;
-      padding: 8px 12px;
-      border-radius: 10px;
+      position: fixed; top: 10px; left: 10px;
+      display: flex; align-items: center; gap: 10px;
+      background: transparent; padding: 8px 12px; border-radius: 10px;
       z-index: 10000;
     }
-    /* Volume Slider with transparent background and grey track */
     #volume-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 120px;
-      height: 6px;
-      background: transparent;
-      outline: none;
+      -webkit-appearance: none; appearance: none;
+      width: 120px; height: 6px; background: transparent; outline: none;
     }
-    /* WebKit track styling */
     #volume-slider::-webkit-slider-runnable-track {
-      background: #ccc;
-      border-radius: 3px;
-      height: 6px;
+      background: #ccc; border-radius: 3px; height: 6px;
     }
     #volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
-      transition: transform 0.2s;
+      -webkit-appearance: none; appearance: none;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: transform 0.2s;
       margin-top: -5px;
     }
-    #volume-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-    }
-    /* Firefox track styling */
+    #volume-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
     #volume-slider::-moz-range-track {
-      background: #ccc;
-      border-radius: 3px;
-      height: 6px;
+      background: #ccc; border-radius: 3px; height: 6px;
     }
     #volume-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
-      transition: transform 0.2s;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: #fff; cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: transform 0.2s;
     }
-    #volume-slider::-moz-range-thumb:hover {
-      transform: scale(1.1);
-    }
-    /* Speaker Icon styling */
-    #speaker-icon {
-      width: 24px;
-      height: 24px;
-      fill: #808080;
-      transition: fill 0.3s ease;
-    }
-    #speaker-icon:hover {
-      fill: #ffffff;
-    }
+    #volume-slider::-moz-range-thumb:hover { transform: scale(1.1); }
+    #speaker-icon { width: 24px; height: 24px; fill: #808080; transition: fill 0.3s ease; }
+    #speaker-icon:hover { fill: #ffffff; }
     /* Animated circles */
     .circle {
-      position: fixed;
-      top: 100vh;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 10000;
+      position: fixed; top: 100vh; background: rgba(255,255,255,0.5);
+      border-radius: 50%; pointer-events: none; z-index: 10000;
       animation: floatUp linear infinite;
     }
     @keyframes floatUp {
-      0%   { top: 100vh; opacity: 0; }
-      20%  { opacity: 0.8; }
+      0% { top: 100vh; opacity: 0; }
+      20% { opacity: 0.8; }
       100% { top: -10vh; opacity: 0; }
     }
-    /* Popup for copy-to-clipboard notification */
+    /* Copy Popup */
     #copy-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
+      position: fixed; top: 50%; left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
       background: linear-gradient(45deg, #cccccc, #ffffff);
-      color: #000;
-      padding: 20px;
-      border-radius: 10px;
+      color: #000; padding: 20px; border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      opacity: 0;
-      visibility: hidden;
+      opacity: 0; visibility: hidden;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-      z-index: 10006;
-      text-align: center;
-      min-width: 200px;
+      z-index: 10006; text-align: center; min-width: 200px;
     }
     #copy-popup.show {
-      opacity: 1;
-      visibility: visible;
+      opacity: 1; visibility: visible;
       transform: translate(-50%, -50%) scale(1);
     }
     #copy-popup button {
-      background: none;
-      border: none;
-      color: #000;
-      font-size: 14px;
-      margin: 15px auto 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
+      background: none; border: none; color: #000;
+      font-size: 14px; margin: 15px auto 0;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; gap: 5px;
     }
-    #copy-popup button .checkmark {
-      width: 20px;  /* Increased size */
-      height: 20px; /* Increased size */
-      fill: #808080;
-    }
+    #copy-popup button .checkmark { width: 20px; height: 20px; fill: #808080; }
   </style>
 </head>
 <body>
@@ -375,11 +182,9 @@
     </div>
 
     <!-- Bio -->
-    <div class="bio">
-      Leave a star under my profile!
-    </div>
+    <div class="bio">Leave a star under my profile!</div>
 
-    <!-- Social links as icons with tooltips and clipboard functionality -->
+    <!-- Social Links -->
     <div class="social-links">
       <div class="social-icon" id="discord-copy">
         <img src="https://i.ibb.co/yGKy01d/toppng-com-discord-black-logo-800x800.png" alt="Discord">
@@ -417,7 +222,7 @@
   <!-- Hidden Music Player -->
   <div id="music-player" style="position: fixed; top: -9999px; left: -9999px; z-index: 999999;"></div>
 
-  <!-- Copy Popup for clipboard notification -->
+  <!-- Copy Popup -->
   <div id="copy-popup">
     <div>Copied to clipboard</div>
     <button id="copy-popup-close">
@@ -428,6 +233,7 @@
     </button>
   </div>
 
+  <!-- === JavaScript for Other Effects === -->
   <script>
     // Overlay click: remove overlay and start music
     const overlay = document.getElementById('overlay');
@@ -486,60 +292,21 @@
       }
     });
 
-    // Star system toggle with dynamic star count color
-    const starIcon = document.getElementById('star-icon');
-    const starCounter = document.getElementById('star-counter');
-    const starSVG = document.getElementById('star-svg');
-    if (!localStorage.getItem('starCount')) {
-      localStorage.setItem('starCount', "0");
+    // Clipboard copy & popup function
+    function copyUsername(username) {
+      navigator.clipboard.writeText(username).then(() => {
+        copyPopup.classList.add("show");
+      }).catch(err => {
+        console.error("Failed to copy: ", err);
+      });
     }
-    starCounter.textContent = localStorage.getItem('starCount');
-    let starred = localStorage.getItem('starGiven') === 'true';
-    // Set star SVG fill and star count color based on starred state
-    starSVG.setAttribute('fill', starred ? '#ffffff' : '#808080');
-    starCounter.style.color = starred ? '#ffffff' : '#808080';
-    starIcon.addEventListener('click', () => {
-      let count = parseInt(localStorage.getItem('starCount'), 10);
-      if (!starred) {
-        count++;
-        localStorage.setItem('starCount', count.toString());
-        starCounter.textContent = count;
-        starSVG.setAttribute('fill', '#ffffff');
-        starIcon.style.transform = 'scale(1.2)';
-        starCounter.style.color = '#ffffff';
-        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
-        localStorage.setItem('starGiven', 'true');
-        starred = true;
-      } else {
-        count = Math.max(0, count - 1);
-        localStorage.setItem('starCount', count.toString());
-        starCounter.textContent = count;
-        starSVG.setAttribute('fill', '#808080');
-        starIcon.style.transform = 'scale(0.8)';
-        starCounter.style.color = '#808080';
-        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
-        localStorage.setItem('starGiven', 'false');
-        starred = false;
-      }
-    });
-
-    // Visitor count using CountAPI
-    const visitorCountEl = document.getElementById('visitor-count');
-    const namespace = 'dx9g-website', key = 'visitors';
-    if (!localStorage.getItem("visited")) {
-      fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-        .then(res => res.json())
-        .then(data => {
-          visitorCountEl.textContent = data.value;
-          localStorage.setItem("visited", "true");
-        })
-        .catch(() => { visitorCountEl.textContent = 'N/A'; });
-    } else {
-      fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-        .then(res => res.json())
-        .then(data => { visitorCountEl.textContent = data.value; })
-        .catch(() => { visitorCountEl.textContent = 'N/A'; });
-    }
+    const copyPopup = document.getElementById('copy-popup');
+    const copyPopupClose = document.getElementById('copy-popup-close');
+    copyPopupClose.addEventListener('click', () => { copyPopup.classList.remove("show"); });
+    // Attach clipboard copy events to social icons
+    document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
+    document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
+    document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
 
     // YouTube Music Player
     var musicVideoLink = "https://www.youtube.com/watch?v=EdpsyzRIaTI";
@@ -581,29 +348,75 @@
         player.setVolume(vol);
       }
     });
+  </script>
 
-    // Clipboard copy & popup function
-    function copyUsername(username) {
-      navigator.clipboard.writeText(username).then(() => {
-        copyPopup.classList.add("show");
-      }).catch(err => {
-        console.error("Failed to copy: ", err);
+  <!-- === Firebase Realtime Database Integration for Views and Stars === -->
+  <script type="module">
+    // Import Firebase functions for app and database
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
+
+    // Your Firebase configuration (as you provided)
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-faGgVBFXHFVjzOV0n6rKAibDTYUoYm0",
+      authDomain: "dx9g-ce4b8.firebaseapp.com",
+      databaseURL: "https://dx9g-ce4b8-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "dx9g-ce4b8",
+      storageBucket: "dx9g-ce4b8.firebasestorage.app",
+      messagingSenderId: "353468434618",
+      appId: "1:353468434618:web:35730c977f79388ca85a83",
+      measurementId: "G-JXZ5KSV7LX"
+    };
+
+    // Initialize Firebase
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getDatabase(fbApp);
+
+    // --- Views Counter ---
+    const viewsRef = ref(db, "views");
+    // Increment views on page load
+    runTransaction(viewsRef, (currentViews) => {
+      return (currentViews || 0) + 1;
+    });
+    // Listen for real-time updates on views and update UI
+    onValue(viewsRef, (snapshot) => {
+      const views = snapshot.val() || 0;
+      document.getElementById("visitor-count").textContent = views;
+    });
+
+    // --- Stars Counter ---
+    const starsRef = ref(db, "stars");
+    // Listen for real-time updates on stars and update UI
+    onValue(starsRef, (snapshot) => {
+      const stars = snapshot.val() || 0;
+      document.getElementById("star-counter").textContent = stars;
+    });
+
+    // Function to update stars counter by a delta (e.g., +1 or -1)
+    async function updateStars(delta) {
+      await runTransaction(starsRef, (currentStars) => {
+        return (currentStars || 0) + delta;
       });
     }
-    const copyPopup = document.getElementById('copy-popup');
-    const copyPopupClose = document.getElementById('copy-popup-close');
-    copyPopupClose.addEventListener('click', () => {
-      copyPopup.classList.remove("show");
-    });
-    // Attach clipboard copy events to each social icon
-    document.getElementById('discord-copy').addEventListener('click', () => {
-      copyUsername("dx9g");
-    });
-    document.getElementById('github-copy').addEventListener('click', () => {
-      copyUsername("dx9g");
-    });
-    document.getElementById('roblox-copy').addEventListener('click', () => {
-      copyUsername("acceptedapoIogies");
+
+    const starIcon = document.getElementById('star-icon');
+    let userStarred = localStorage.getItem('starGiven') === 'true';
+
+    starIcon.addEventListener('click', async () => {
+      let delta = 0;
+      if (!userStarred) {
+        delta = 1;
+        starIcon.style.transform = 'scale(1.2)';
+        localStorage.setItem('starGiven', 'true');
+        userStarred = true;
+      } else {
+        delta = -1;
+        starIcon.style.transform = 'scale(0.8)';
+        localStorage.setItem('starGiven', 'false');
+        userStarred = false;
+      }
+      await updateStars(delta);
+      setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
     });
   </script>
 </body>
