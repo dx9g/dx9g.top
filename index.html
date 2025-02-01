@@ -68,11 +68,6 @@
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
-    /* Star system styles */
-    #star-system { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
-    #star-counter { font-size: 24px; font-weight: bold; }
-    #star-icon { cursor: pointer; transition: transform 0.3s ease; }
-    #star-svg { transition: fill 0.3s ease; }
     /* Visitor counter */
     #visitor-counter {
       position: absolute; bottom: 10px; left: 10px;
@@ -197,17 +192,6 @@
       <div class="social-icon" id="roblox-copy">
         <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
         <div class="tooltip">acceptedapoIogies</div>
-      </div>
-    </div>
-
-    <!-- Star System -->
-    <div id="star-system">
-      <span id="star-counter">0</span>
-      <div id="star-icon">
-        <!-- The star SVG initially has a gray fill (#808080). When clicked, the JavaScript below changes it to white. -->
-        <svg id="star-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#808080" width="32px" height="32px">
-          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-        </svg>
       </div>
     </div>
 
@@ -351,7 +335,7 @@
     });
   </script>
 
-  <!-- === Firebase Realtime Database Integration for Views and Stars === -->
+  <!-- === Firebase Realtime Database Integration for Views === -->
   <script type="module">
     // Import Firebase functions for app and database
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
@@ -384,54 +368,6 @@
     onValue(viewsRef, (snapshot) => {
       const views = snapshot.val() || 0;
       document.getElementById("visitor-count").textContent = views;
-    });
-
-    // --- Stars Counter ---
-    const starsRef = ref(db, "stars");
-    onValue(starsRef, (snapshot) => {
-      const stars = snapshot.val() || 0;
-      document.getElementById("star-counter").textContent = stars;
-    });
-
-    // Function to update stars counter by adding delta
-    async function updateStars(delta) {
-      await runTransaction(starsRef, (currentStars) => {
-        return (currentStars || 0) + delta;
-      });
-    }
-
-    // When a user clicks the star icon, check their IP and allow only one star per IP.
-    const starIcon = document.getElementById('star-icon');
-    const starSvg = document.getElementById('star-svg');
-    starIcon.addEventListener('click', async () => {
-      try {
-        // Fetch the client's public IP using ipify
-        const ipResponse = await fetch("https://api.ipify.org?format=json");
-        const ipData = await ipResponse.json();
-        const userIP = ipData.ip;
-        
-        // Reference for this IP under the star_ips node
-        const ipRef = ref(db, "star_ips/" + userIP);
-        const snapshot = await get(ipRef);
-        
-        if (snapshot.exists()) {
-          // This IP has already given a star; do nothing.
-          console.log("Star already given from IP:", userIP);
-          return;
-        }
-        
-        // Animate the star (scale up briefly) and change its fill color to white
-        starIcon.style.transform = 'scale(1.2)';
-        starSvg.style.fill = '#ffffff';
-        // Increment the stars counter by 1
-        await updateStars(1);
-        // Record this IP in the database so no further star is allowed from this IP
-        await set(ipRef, true);
-        // Reset the star icon's scale after a short delay
-        setTimeout(() => { starIcon.style.transform = 'scale(1)'; }, 200);
-      } catch (err) {
-        console.error("Error processing star click:", err);
-      }
     });
   </script>
 </body>
