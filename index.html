@@ -7,142 +7,317 @@
   <title>dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
-    /* === Your CSS (unchanged) === */
+    /* === Your CSS (unchanged parts) === */
     @font-face {
       font-family: 'Aoki Regular';
       src: url('Aoki Regular.otf') format('opentype');
     }
     * { font-family: 'Aoki Regular', sans-serif; }
-    .bg-video { position: fixed; top: 0; left: 0; min-width: 100vw; min-height: 100vh; object-fit: cover; z-index: -2; }
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+    }
     .overlay {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(10px);
-      display: flex; align-items: center; justify-content: center;
-      z-index: 10005; cursor: pointer; transition: opacity 0.5s ease;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10005;
+      cursor: pointer;
+      transition: opacity 0.5s ease;
     }
     .overlay.hidden { opacity: 0; pointer-events: none; }
-    .overlay .message { font-size: 48px; color: #ffffff; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+    .overlay .message {
+      font-size: 48px;
+      color: #ffffff;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    }
     body {
-      margin: 0; padding: 0; height: 100vh;
-      display: flex; align-items: center; justify-content: center;
-      color: white; overflow: hidden; position: relative;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      position: relative;
     }
     .main-container {
       background: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
-      padding: 20px 30px; border-radius: 20px;
+      padding: 20px 30px;
+      border-radius: 20px;
       box-shadow: 0 10px 30px rgba(255,255,255,0.1);
-      width: 600px; display: flex; flex-direction: column;
-      align-items: center; animation: fadeIn 3s ease-in-out;
-      transform-style: preserve-3d; perspective: 1000px;
-      will-change: transform; z-index: 10001; position: relative;
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 3s ease-in-out;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      will-change: transform;
+      z-index: 10001;
+      position: relative;
     }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .title { font-size: 32px; font-weight: 600; color: #d3d3d3;
-             text-shadow: 2px 2px 4px rgba(255,255,255,0.1);
-             margin-bottom: 20px; text-align: center; width: 100%; }
-    .discord-profile { position: relative; width: 80px; height: 80px; margin-bottom: 15px; }
-    .discord-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
-    .discord-decoration { position: absolute; top: 0; left: 0; width: 80px; height: 80px; pointer-events: none; }
-    .bio { font-size: 18px; color: #c0c0c0; max-width: 350px; margin-bottom: 20px; text-align: center; }
-    .social-links { display: flex; gap: 20px; align-items: center; justify-content: center; margin-top: 20px; }
-    .social-icon { position: relative; display: inline-block; cursor: pointer; }
-    .social-icon img { width: 40px; height: 40px; transition: transform 0.3s; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .title {
+      font-size: 32px;
+      font-weight: 600;
+      color: #d3d3d3;
+      text-shadow: 2px 2px 4px rgba(255,255,255,0.1);
+      margin-bottom: 20px;
+      text-align: center;
+      width: 100%;
+    }
+    .discord-profile {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 15px;
+    }
+    .discord-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .discord-decoration {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 80px;
+      height: 80px;
+      pointer-events: none;
+    }
+    /* --- Updated Bio with Typing Animation --- */
+    .bio {
+      font-size: 18px;
+      text-align: center;
+      /* Keeping the container background intact; the animated text will be black */
+    }
+    #bio-typing {
+      color: black;
+      font-size: 24px;
+    }
+    #typing-cursor {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') no-repeat center center;
+      background-size: contain;
+      margin-left: 5px;
+      animation: blink 1s step-start infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+    .social-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .social-icon {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    .social-icon img {
+      width: 40px;
+      height: 40px;
+      transition: transform 0.3s;
+    }
     .social-icon:hover img { transform: scale(1.1); }
     .social-icon .tooltip {
-      position: absolute; top: 110%; left: 50%;
+      position: absolute;
+      top: 110%;
+      left: 50%;
       transform: translateX(-50%) translateY(10px);
       background: linear-gradient(45deg, #cccccc, #ffffff);
-      color: #000; padding: 3px 7px; border-radius: 5px;
-      font-size: 10px; white-space: nowrap;
-      opacity: 0; pointer-events: none;
+      color: #000;
+      padding: 3px 7px;
+      border-radius: 5px;
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
       z-index: 10002;
     }
     .social-icon:hover .tooltip {
-      opacity: 1; transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
     .social-icon .tooltip::before {
       content: "";
-      position: absolute; top: -5px; left: 50%;
+      position: absolute;
+      top: -5px;
+      left: 50%;
       transform: translateX(-50%);
-      border-width: 5px; border-style: solid;
+      border-width: 5px;
+      border-style: solid;
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
     /* Visitor counter */
     #visitor-counter {
-      position: absolute; bottom: 10px; left: 10px;
-      display: flex; align-items: center; gap: 5px;
-      font-size: 16px; color: #c0c0c0;
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 16px;
+      color: #c0c0c0;
     }
-    #eye-icon { width: 24px; height: 24px; fill: #c0c0c0; transition: fill 0.3s ease; }
+    #eye-icon {
+      width: 24px;
+      height: 24px;
+      fill: #c0c0c0;
+      transition: fill 0.3s ease;
+    }
     #eye-icon:hover { fill: #ffffff; }
     /* Music control panel */
     #music-controls {
-      position: fixed; top: 10px; left: 10px;
-      display: flex; align-items: center; gap: 10px;
-      background: transparent; padding: 8px 12px; border-radius: 10px;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 10px;
       z-index: 10000;
     }
     #volume-slider {
-      -webkit-appearance: none; appearance: none;
-      width: 120px; height: 6px; background: transparent; outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 120px;
+      height: 6px;
+      background: transparent;
+      outline: none;
     }
     #volume-slider::-webkit-slider-runnable-track {
-      background: #ccc; border-radius: 3px; height: 6px;
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
     }
     #volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none; appearance: none;
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #fff; cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: transform 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
       margin-top: -5px;
     }
-    #volume-slider::-webkit-slider-thumb:hover { transform: scale(1.1); }
+    #volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
     #volume-slider::-moz-range-track {
-      background: #ccc; border-radius: 3px; height: 6px;
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
     }
     #volume-slider::-moz-range-thumb {
-      width: 16px; height: 16px; border-radius: 50%;
-      background: #fff; cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5); transition: transform 0.2s;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
     }
-    #volume-slider::-moz-range-thumb:hover { transform: scale(1.1); }
-    #speaker-icon { width: 24px; height: 24px; fill: #808080; transition: fill 0.3s ease; }
+    #volume-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+    }
+    #speaker-icon {
+      width: 24px;
+      height: 24px;
+      fill: #808080;
+      transition: fill 0.3s ease;
+    }
     #speaker-icon:hover { fill: #ffffff; }
-    /* Animated circles */
-    .circle {
-      position: fixed; top: 100vh; background: rgba(255,255,255,0.5);
-      border-radius: 50%; pointer-events: none; z-index: 10000;
-      animation: floatUp linear infinite;
+    /* --- Snow Animation (replacing circles) --- */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      background: white;
+      opacity: 0.8;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      animation: snowFall linear forwards;
     }
-    @keyframes floatUp {
-      0% { top: 100vh; opacity: 0; }
-      20% { opacity: 0.8; }
-      100% { top: -10vh; opacity: 0; }
+    @keyframes snowFall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) translateX(30px) rotate(360deg);
+        opacity: 0.5;
+      }
     }
     /* Copy Popup */
     #copy-popup {
-      position: fixed; top: 50%; left: 50%;
+      position: fixed;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
       background: linear-gradient(45deg, #cccccc, #ffffff);
-      color: #000; padding: 20px; border-radius: 10px;
+      color: #000;
+      padding: 20px;
+      border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      opacity: 0; visibility: hidden;
+      opacity: 0;
+      visibility: hidden;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-      z-index: 10006; text-align: center; min-width: 200px;
+      z-index: 10006;
+      text-align: center;
+      min-width: 200px;
     }
     #copy-popup.show {
-      opacity: 1; visibility: visible;
+      opacity: 1;
+      visibility: visible;
       transform: translate(-50%, -50%) scale(1);
     }
     #copy-popup button {
-      background: none; border: none; color: #000;
-      font-size: 14px; margin: 15px auto 0;
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 5px;
+      background: none;
+      border: none;
+      color: #000;
+      font-size: 14px;
+      margin: 15px auto 0;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
     }
-    #copy-popup button .checkmark { width: 20px; height: 20px; fill: #808080; }
+    #copy-popup button .checkmark {
+      width: 20px;
+      height: 20px;
+      fill: #808080;
+    }
   </style>
 </head>
 <body>
@@ -177,8 +352,11 @@
       <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
     </div>
 
-    <!-- Bio -->
-    <div class="bio"></div>
+    <!-- Bio with Typing Animation -->
+    <div class="bio">
+      <span id="bio-typing"></span>
+      <span id="typing-cursor"></span>
+    </div>
 
     <!-- Social Links -->
     <div class="social-links">
@@ -256,27 +434,29 @@
     }
     animateTilt();
 
-    // Animated circles
-    function createCircle() {
-      const circle = document.createElement('div');
-      circle.classList.add('circle');
-      circle.style.left = Math.random() * 100 + 'vw';
-      const size = Math.random() * 20 + 10;
-      circle.style.width = size + 'px';
-      circle.style.height = size + 'px';
-      const duration = (Math.random() * 10 + 20) * 1000;
-      circle.style.animationDuration = duration + 'ms';
-      setTimeout(() => { circle.remove(); }, duration + 1000);
-      document.body.appendChild(circle);
+    // --- Snow Animation (replacing circles) ---
+    function createSnowflake() {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      // Random size between 5px and 15px
+      const size = Math.random() * 10 + 5;
+      snowflake.style.width = `${size}px`;
+      snowflake.style.height = `${size}px`;
+      // Random horizontal start position
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      // Random animation duration between 8s and 15s
+      const duration = Math.random() * 7000 + 8000;
+      snowflake.style.animationDuration = duration + 'ms';
+      // Random delay for varied appearance
+      const delay = Math.random() * 5000;
+      snowflake.style.animationDelay = delay + 'ms';
+      document.body.appendChild(snowflake);
+      // Remove snowflake after animation ends
+      setTimeout(() => {
+        snowflake.remove();
+      }, duration + delay);
     }
-    let circleInterval = setInterval(createCircle, 200);
-    document.addEventListener("visibilitychange", function() {
-      if (document.hidden) {
-        clearInterval(circleInterval);
-      } else {
-        circleInterval = setInterval(createCircle, 200);
-      }
-    });
+    setInterval(createSnowflake, 300);
 
     // Clipboard copy & popup function
     function copyUsername(username) {
@@ -403,6 +583,40 @@
         setTimeout(updateTitle, deleting ? 100 : 200);
       }
       updateTitle();
+    })();
+  </script>
+
+  <!-- Bio Typing Animation Script -->
+  <script>
+    (function animateBio() {
+      const fullText = "Hey..<3";
+      let currentIndex = 0;
+      let deleting = false;
+      const bioTyping = document.getElementById("bio-typing");
+      
+      function updateBio() {
+        if (!deleting) {
+          currentIndex++;
+          if (currentIndex > fullText.length) {
+            // Pause at full text before deleting
+            setTimeout(() => {
+              deleting = true;
+              updateBio();
+            }, 1000);
+            return;
+          }
+        } else {
+          currentIndex--;
+          if (currentIndex < 0) {
+            deleting = false;
+            setTimeout(updateBio, 500);
+            return;
+          }
+        }
+        bioTyping.textContent = fullText.substring(0, currentIndex);
+        setTimeout(updateBio, deleting ? 100 : 200);
+      }
+      updateBio();
     })();
   </script>
 </body>
