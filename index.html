@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- The title will be animated by JavaScript -->
   <title>dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
@@ -369,6 +370,40 @@
       const views = snapshot.val() || 0;
       document.getElementById("visitor-count").textContent = views;
     });
+  </script>
+
+  <!-- Title Typing Animation Script -->
+  <script>
+    (function animateTitle() {
+      const fullText = "@dx9g";
+      let currentIndex = 0;
+      let deleting = false;
+      
+      function updateTitle() {
+        if (!deleting) {
+          currentIndex++;
+          if (currentIndex > fullText.length) {
+            // Pause at full text before deleting
+            setTimeout(() => {
+              deleting = true;
+              updateTitle();
+            }, 1000);
+            return;
+          }
+        } else {
+          currentIndex--;
+          if (currentIndex < 0) {
+            // Pause before typing again
+            deleting = false;
+            setTimeout(updateTitle, 500);
+            return;
+          }
+        }
+        document.title = fullText.substring(0, currentIndex);
+        setTimeout(updateTitle, deleting ? 100 : 200);
+      }
+      updateTitle();
+    })();
   </script>
 </body>
 </html>
