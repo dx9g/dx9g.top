@@ -466,30 +466,28 @@
     (function() {
       let prevX = null, prevY = null;
       const cursorSnowflakes = [];
-      // On each mouse move, interpolate along the path between the previous and current positions.
       document.addEventListener("mousemove", function(e) {
         if (prevX !== null && prevY !== null) {
           const dx = e.clientX - prevX;
           const dy = e.clientY - prevY;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          // If the mouse moved, interpolate along the path.
           if (dist > 0) {
+            // Interpolate along the path
             const count = Math.max(1, Math.floor(dist / 10));
-            // Normalize the movement vector.
             const ndx = dx / dist;
             const ndy = dy / dist;
             for (let i = 0; i < count; i++) {
               const fraction = i / count;
-              // Start at the previous position and move toward the current position.
+              // Start from prevX,prevY and interpolate to current position.
               let baseX = prevX + fraction * dx;
               let baseY = prevY + fraction * dy;
-              // Add a slight perpendicular offset (spread) that increases with fraction.
+              // Apply a small perpendicular offset initially.
               const perpX = -ndy;
               const perpY = ndx;
-              const offset = (Math.random() - 0.5) * 10 * fraction;
+              const offset = (Math.random() - 0.5) * 5; // small initial offset
               baseX += perpX * offset;
               baseY += perpY * offset;
-              // Create a snowflake at this interpolated position.
+              // Create a cursor snowflake with initial velocity proportional to mouse movement.
               createCursorSnowflake(baseX, baseY, dx * 0.4, dy * 0.4);
             }
           }
@@ -503,20 +501,24 @@
         el.style.left = x + "px";
         el.style.top = y + "px";
         document.body.appendChild(el);
-        cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, life: 0 });
+        // Assign an additional spread acceleration (randomized) that will increase horizontal displacement over time.
+        const spreadAccel = (Math.random() - 0.5) * 0.2; // between -0.1 and 0.1
+        cursorSnowflakes.push({ element: el, x: x, y: y, vx: vx, vy: vy, spreadAccel: spreadAccel, life: 0 });
       }
       function updateCursorSnowflakes() {
         const dt = 1; // time step
         const gravity = 0.7; // gravity acceleration for faster fall
         for (let i = cursorSnowflakes.length - 1; i >= 0; i--) {
           const s = cursorSnowflakes[i];
+          // Increase horizontal velocity gradually using spread acceleration.
+          s.vx += s.spreadAccel * dt;
           s.vy += gravity * dt;
           s.x += s.vx * dt;
           s.y += s.vy * dt;
           s.life += dt;
           s.element.style.left = s.x + "px";
           s.element.style.top = s.y + "px";
-          // Remove snowflake if it goes off-screen or lives too long.
+          // Remove snowflake if off-screen or too old.
           if (s.y > window.innerHeight + 20 || s.x < -20 || s.x > window.innerWidth + 20 || s.life > 150) {
             s.element.remove();
             cursorSnowflakes.splice(i, 1);
