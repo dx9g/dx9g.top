@@ -7,16 +7,19 @@
   <title>dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
-    /* === Your CSS (unchanged parts) === */
+    /* === Font & Global Styles === */
     @font-face {
       font-family: 'Aoki Regular';
       src: url('Aoki Regular.otf') format('opentype');
     }
     * { font-family: 'Aoki Regular', sans-serif; }
+
     /* Custom Cursor */
     body, * {
       cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') 16 16, auto;
     }
+
+    /* Background Video */
     .bg-video {
       position: fixed;
       top: 0;
@@ -26,6 +29,8 @@
       object-fit: cover;
       z-index: -2;
     }
+
+    /* Overlay */
     .overlay {
       position: fixed;
       top: 0;
@@ -46,6 +51,8 @@
       color: #ffffff;
       text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     }
+
+    /* Body & Main Container */
     body {
       margin: 0;
       padding: 0;
@@ -86,6 +93,8 @@
       text-align: center;
       width: 100%;
     }
+
+    /* Discord Profile */
     .discord-profile {
       position: relative;
       width: 80px;
@@ -106,19 +115,20 @@
       height: 80px;
       pointer-events: none;
     }
-    /* --- Updated Bio with Fixed Height to Avoid Layout Shifts --- */
+
+    /* Bio (Single Animated Text Slot) */
     .bio {
       font-size: 18px;
       text-align: center;
       min-height: 30px;  /* Ensures the container stays the same height */
     }
-    /* Each animated text slot */
-    .bio-typing {
-      display: block;
-      margin: 5px 0;
+    #bio-typing {
+      display: inline-block;
       color: black;
       font-size: 24px;
     }
+
+    /* Social Links */
     .social-links {
       display: flex;
       gap: 20px;
@@ -168,7 +178,8 @@
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
-    /* Visitor counter */
+
+    /* Visitor Counter */
     #visitor-counter {
       position: absolute;
       bottom: 10px;
@@ -186,7 +197,8 @@
       transition: fill 0.3s ease;
     }
     #eye-icon:hover { fill: #ffffff; }
-    /* Music control panel */
+
+    /* Music Control Panel */
     #music-controls {
       position: fixed;
       top: 10px;
@@ -199,6 +211,39 @@
       border-radius: 10px;
       z-index: 10000;
     }
+    /* Wrap the speaker icon in a container for easy mute styling */
+    #speaker-button {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    /* The SVG speaker icon */
+    #speaker-icon {
+      width: 24px;
+      height: 24px;
+      fill: #808080;
+      transition: fill 0.3s ease;
+    }
+    #speaker-icon:hover { fill: #ffffff; }
+    /* The mute line overlay (hidden by default) */
+    .mute-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0;
+      transform: rotate(45deg);
+      border-top: 2px solid #fff;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    /* When muted, show the line */
+    #speaker-button.muted .mute-line {
+      opacity: 1;
+    }
+
+    /* Volume Slider */
     #volume-slider {
       -webkit-appearance: none;
       appearance: none;
@@ -244,15 +289,8 @@
     #volume-slider::-moz-range-thumb:hover {
       transform: scale(1.1);
     }
-    #speaker-icon {
-      width: 24px;
-      height: 24px;
-      fill: #808080;
-      transition: fill 0.3s ease;
-      cursor: pointer;
-    }
-    #speaker-icon:hover { fill: #ffffff; }
-    /* --- Snow Animation (improved) --- */
+
+    /* Snow Animation */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -273,6 +311,7 @@
         opacity: 0.5;
       }
     }
+
     /* Copy Popup */
     #copy-popup {
       position: fixed;
@@ -324,12 +363,15 @@
 
   <!-- Music Control Panel -->
   <div id="music-controls">
-    <!-- Speaker icon (click to toggle mute) -->
-    <svg id="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M3 9v6h4l5 5V4L7 9H3z"/>
-      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03z"/>
-      <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-    </svg>
+    <!-- Speaker button (click to toggle mute) -->
+    <div id="speaker-button">
+      <svg id="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M3 9v6h4l5 5V4L7 9H3z"/>
+        <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03z"/>
+        <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+      </svg>
+      <div class="mute-line"></div>
+    </div>
     <input type="range" id="volume-slider" min="0" max="100" value="70">
   </div>
 
@@ -348,14 +390,9 @@
       <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
     </div>
 
-    <!-- Bio with Animated Text Slots -->
+    <!-- Bio with Animated Text (Only one displayed at a time) -->
     <div class="bio">
-      <span class="bio-typing" data-text="lost"></span>
-      <span class="bio-typing" data-text="live in Poland"></span>
-      <span class="bio-typing" data-text="born in Italy"></span>
-      <span class="bio-typing" data-text="catholic"></span>
-      <span class="bio-typing" data-text="obsession with money
-"></span>
+      <span id="bio-typing"></span>
     </div>
 
     <!-- Social Links -->
@@ -383,7 +420,7 @@
     </div>
   </div>
 
-  <!-- Hidden Background Music (new sound) -->
+  <!-- Hidden Background Music -->
   <audio id="background-music" src="https://r2.guns.lol/39d919b5-4cbd-4b5a-9eea-32768653d8dd.mp3" loop></audio>
 
   <!-- Copy Popup -->
@@ -410,33 +447,17 @@
       setTimeout(() => { overlay.remove(); }, 500);
     });
 
-    // Speaker toggle: Mute/Unmute background audio and update icon
-    const speakerIcon = document.getElementById('speaker-icon');
+    // Speaker toggle: Mute/Unmute background audio and update icon with smooth animation
+    const speakerButton = document.getElementById('speaker-button');
     let isMuted = false;
-    speakerIcon.addEventListener('click', () => {
+    speakerButton.addEventListener('click', () => {
       isMuted = !isMuted;
       const bgMusic = document.getElementById('background-music');
       bgMusic.muted = isMuted;
       if (isMuted) {
-        // Add a diagonal line to indicate mute
-        if (!document.getElementById('mute-line')) {
-          const muteLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-          muteLine.setAttribute("id", "mute-line");
-          muteLine.setAttribute("x1", "3");
-          muteLine.setAttribute("y1", "3");
-          muteLine.setAttribute("x2", "21");
-          muteLine.setAttribute("y2", "21");
-          muteLine.setAttribute("stroke", "#fff");
-          muteLine.setAttribute("stroke-width", "2");
-          muteLine.setAttribute("stroke-linecap", "round");
-          speakerIcon.appendChild(muteLine);
-        }
+        speakerButton.classList.add('muted');
       } else {
-        // Remove the mute line
-        const muteLine = document.getElementById('mute-line');
-        if (muteLine) {
-          muteLine.remove();
-        }
+        speakerButton.classList.remove('muted');
       }
     });
 
@@ -518,40 +539,37 @@
       }
     });
 
-    // Animate multiple bio-typing text slots
-    function animateText(element, fullText) {
-      let currentIndex = 0;
-      let deleting = false;
-      function update() {
-        if (!deleting) {
-          currentIndex++;
-          if (currentIndex > fullText.length) {
-            setTimeout(() => {
-              deleting = true;
-              update();
-            }, 1000);
+    // Animate bio text: cycle through an array of texts one at a time with a typewriter effect
+    function animateBioTexts(element, texts) {
+      let index = 0;
+      let currentChar = 0;
+      let isDeleting = false;
+      function type() {
+        const text = texts[index];
+        if (!isDeleting) {
+          currentChar++;
+          element.textContent = text.substring(0, currentChar);
+          if (currentChar === text.length) {
+            setTimeout(() => { isDeleting = true; type(); }, 1000);
             return;
           }
         } else {
-          currentIndex--;
-          if (currentIndex < 0) {
-            deleting = false;
-            setTimeout(update, 500);
+          currentChar--;
+          element.textContent = text.substring(0, currentChar);
+          if (currentChar === 0) {
+            isDeleting = false;
+            index = (index + 1) % texts.length;
+            setTimeout(type, 500);
             return;
           }
         }
-        element.textContent = fullText.substring(0, currentIndex);
-        setTimeout(update, deleting ? 100 : 200);
+        setTimeout(type, isDeleting ? 100 : 200);
       }
-      update();
+      type();
     }
-    document.querySelectorAll('.bio-typing').forEach((el, index) => {
-      const text = el.getAttribute('data-text') || "";
-      // Stagger the start of each animation by 500ms
-      setTimeout(() => {
-        animateText(el, text);
-      }, index * 500);
-    });
+    const bioTexts = ["lost", "live in Poland", "born in Italy", "catholic", "obsession with money"];
+    const bioTyping = document.getElementById('bio-typing');
+    animateBioTexts(bioTyping, bioTexts);
   </script>
 
   <!-- === Firebase Realtime Database Integration for Views === -->
