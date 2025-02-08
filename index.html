@@ -12,7 +12,8 @@
       font-family: 'Aoki Regular';
       src: url('Aoki Regular.otf') format('opentype');
     }
-    /* Custom Cursor */
+    * { font-family: 'Aoki Regular', sans-serif; }
+    /* Set the custom cursor for the entire page with centered hotspot (assumes 32x32 image) */
     body, * {
       cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') 16 16, auto;
     }
@@ -109,7 +110,7 @@
     .bio {
       font-size: 18px;
       text-align: center;
-      min-height: 30px;
+      min-height: 30px;  /* Ensures the container stays the same height */
     }
     #bio-typing {
       color: black;
@@ -248,6 +249,7 @@
     }
     #speaker-icon:hover { fill: #ffffff; }
     /* --- Snow Animation (improved) --- */
+    /* We use a CSS variable --tx for the final horizontal translation */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -264,6 +266,7 @@
         opacity: 1;
       }
       100% {
+        /* Translate vertically by 110vh and horizontally by a variable amount */
         transform: translate(var(--tx), 110vh) rotate(360deg);
         opacity: 0.5;
       }
@@ -338,8 +341,8 @@
     
     <!-- Discord Profile Section -->
     <div class="discord-profile">
-      <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/a_ebc6e8afbae29ff2886cbca16da266f0?size=1024" alt="Discord Avatar">
-      <img class="discord-decoration" src="https://itspi3141.github.io/discord-fake-avatar-decorations/public/decorations/angry.png" alt="Discord Decoration">
+      <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/779454e09773e5508c8ef55d74be50f2.webp" alt="Discord Avatar">
+      <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
     </div>
 
     <!-- Bio with Typing Animation -->
@@ -359,7 +362,7 @@
       </div>
       <div class="social-icon" id="roblox-copy">
         <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
-        <div class="tooltip">izvees</div>
+        <div class="tooltip">acceptedapoIogies</div>
       </div>
     </div>
 
@@ -372,8 +375,8 @@
     </div>
   </div>
 
-  <!-- Hidden Background Music (using a direct MP3 file URL) -->
-  <audio id="background-music" src="https://www.youtube.com/watch?v=7sp5LczoNIA" loop></audio>
+  <!-- Hidden Background Music (new sound) -->
+  <audio id="background-music" src="https://r2.guns.lol/485f546f-9723-4220-9a7c-b255ea48e5b7.mp3" loop></audio>
 
   <!-- Copy Popup -->
   <div id="copy-popup">
@@ -413,8 +416,7 @@
       targetRotationX = offsetY * maxTilt;
     });
     mainContainer.addEventListener('mouseleave', () => {
-      targetRotationX = 0; 
-      targetRotationY = 0;
+      targetRotationX = 0; targetRotationY = 0;
     });
     function animateTilt() {
       currentRotationX += (targetRotationX - currentRotationX) * dampening;
@@ -434,7 +436,7 @@
       snowflake.style.height = `${size}px`;
       // Random horizontal start position
       snowflake.style.left = Math.random() * 100 + 'vw';
-      // Random final horizontal offset (wind effect): value between -50px and +30px
+      // Random final horizontal offset (wind effect): value between -50px (to left) and +30px (to right)
       const finalX = Math.random() * 80 - 50; 
       snowflake.style.setProperty('--tx', finalX + 'px');
       // Random animation duration between 4000ms and 7000ms
