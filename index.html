@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -14,7 +13,7 @@
       src: url('Aoki Regular.otf') format('opentype');
     }
     * { font-family: 'Aoki Regular', sans-serif; }
-    /* Set the custom cursor for the entire page with centered hotspot (assumes 32x32 image) */
+    /* Custom Cursor */
     body, * {
       cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') 16 16, auto;
     }
@@ -113,7 +112,10 @@
       text-align: center;
       min-height: 30px;  /* Ensures the container stays the same height */
     }
-    #bio-typing {
+    /* Each animated text slot */
+    .bio-typing {
+      display: block;
+      margin: 5px 0;
       color: black;
       font-size: 24px;
     }
@@ -247,10 +249,10 @@
       height: 24px;
       fill: #808080;
       transition: fill 0.3s ease;
+      cursor: pointer;
     }
     #speaker-icon:hover { fill: #ffffff; }
     /* --- Snow Animation (improved) --- */
-    /* We use a CSS variable --tx for the final horizontal translation */
     .snowflake {
       position: fixed;
       top: -10px;
@@ -267,7 +269,6 @@
         opacity: 1;
       }
       100% {
-        /* Translate vertically by 110vh and horizontally by a variable amount */
         transform: translate(var(--tx), 110vh) rotate(360deg);
         opacity: 0.5;
       }
@@ -323,6 +324,7 @@
 
   <!-- Music Control Panel -->
   <div id="music-controls">
+    <!-- Speaker icon (click to toggle mute) -->
     <svg id="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path d="M3 9v6h4l5 5V4L7 9H3z"/>
       <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.06c1.48-.74 2.5-2.26 2.5-4.03z"/>
@@ -346,9 +348,14 @@
       <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
     </div>
 
-    <!-- Bio with Typing Animation -->
+    <!-- Bio with Animated Text Slots -->
     <div class="bio">
-      <span id="bio-typing"></span>
+      <span class="bio-typing" data-text="lost"></span>
+      <span class="bio-typing" data-text="live in Poland"></span>
+      <span class="bio-typing" data-text="born in Italy"></span>
+      <span class="bio-typing" data-text="catholic"></span>
+      <span class="bio-typing" data-text="obsession with money
+"></span>
     </div>
 
     <!-- Social Links -->
@@ -403,6 +410,36 @@
       setTimeout(() => { overlay.remove(); }, 500);
     });
 
+    // Speaker toggle: Mute/Unmute background audio and update icon
+    const speakerIcon = document.getElementById('speaker-icon');
+    let isMuted = false;
+    speakerIcon.addEventListener('click', () => {
+      isMuted = !isMuted;
+      const bgMusic = document.getElementById('background-music');
+      bgMusic.muted = isMuted;
+      if (isMuted) {
+        // Add a diagonal line to indicate mute
+        if (!document.getElementById('mute-line')) {
+          const muteLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          muteLine.setAttribute("id", "mute-line");
+          muteLine.setAttribute("x1", "3");
+          muteLine.setAttribute("y1", "3");
+          muteLine.setAttribute("x2", "21");
+          muteLine.setAttribute("y2", "21");
+          muteLine.setAttribute("stroke", "#fff");
+          muteLine.setAttribute("stroke-width", "2");
+          muteLine.setAttribute("stroke-linecap", "round");
+          speakerIcon.appendChild(muteLine);
+        }
+      } else {
+        // Remove the mute line
+        const muteLine = document.getElementById('mute-line');
+        if (muteLine) {
+          muteLine.remove();
+        }
+      }
+    });
+
     // Tilt effect for main container
     const mainContainer = document.getElementById('main-container');
     let targetRotationX = 0, targetRotationY = 0;
@@ -437,7 +474,7 @@
       snowflake.style.height = `${size}px`;
       // Random horizontal start position
       snowflake.style.left = Math.random() * 100 + 'vw';
-      // Random final horizontal offset (wind effect): value between -50px (to left) and +30px (to right)
+      // Random final horizontal offset (wind effect): value between -50px and +30px
       const finalX = Math.random() * 80 - 50; 
       snowflake.style.setProperty('--tx', finalX + 'px');
       // Random animation duration between 4000ms and 7000ms
@@ -479,6 +516,41 @@
       if(bgMusic) {
         bgMusic.volume = vol;
       }
+    });
+
+    // Animate multiple bio-typing text slots
+    function animateText(element, fullText) {
+      let currentIndex = 0;
+      let deleting = false;
+      function update() {
+        if (!deleting) {
+          currentIndex++;
+          if (currentIndex > fullText.length) {
+            setTimeout(() => {
+              deleting = true;
+              update();
+            }, 1000);
+            return;
+          }
+        } else {
+          currentIndex--;
+          if (currentIndex < 0) {
+            deleting = false;
+            setTimeout(update, 500);
+            return;
+          }
+        }
+        element.textContent = fullText.substring(0, currentIndex);
+        setTimeout(update, deleting ? 100 : 200);
+      }
+      update();
+    }
+    document.querySelectorAll('.bio-typing').forEach((el, index) => {
+      const text = el.getAttribute('data-text') || "";
+      // Stagger the start of each animation by 500ms
+      setTimeout(() => {
+        animateText(el, text);
+      }, index * 500);
     });
   </script>
 
@@ -549,40 +621,6 @@
         setTimeout(updateTitle, deleting ? 100 : 200);
       }
       updateTitle();
-    })();
-  </script>
-
-  <!-- Bio Typing Animation Script -->
-  <script>
-    (function animateBio() {
-      const fullText = "Hey..<3";
-      let currentIndex = 0;
-      let deleting = false;
-      const bioTyping = document.getElementById("bio-typing");
-      
-      function updateBio() {
-        if (!deleting) {
-          currentIndex++;
-          if (currentIndex > fullText.length) {
-            // Pause at full text before deleting
-            setTimeout(() => {
-              deleting = true;
-              updateBio();
-            }, 1000);
-            return;
-          }
-        } else {
-          currentIndex--;
-          if (currentIndex < 0) {
-            deleting = false;
-            setTimeout(updateBio, 500);
-            return;
-          }
-        }
-        bioTyping.textContent = fullText.substring(0, currentIndex);
-        setTimeout(updateBio, deleting ? 100 : 200);
-      }
-      updateBio();
     })();
   </script>
 </body>
