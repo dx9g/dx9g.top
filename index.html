@@ -52,7 +52,7 @@
       text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
     }
 
-    /* Body & Content Layout */
+    /* Body & Overall Layout */
     body {
       margin: 0;
       padding: 0;
@@ -65,19 +65,8 @@
       overflow: hidden;
       position: relative;
     }
-    /* Wrapper for Mines game and Center stack */
-    .content-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 40px;
-      width: 100%;
-      max-width: 1200px;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    /* Center Stack holds the main container and store container */
+
+    /* Center Stack: Contains main container & store container; centered horizontally */
     .center-stack {
       display: flex;
       flex-direction: column;
@@ -370,6 +359,7 @@
       color: #d3d3d3;
       transition: opacity 0.5s ease;
       opacity: 0.8;
+      text-align: center;
     }
     .store-container:hover { opacity: 1; }
     .store-text {
@@ -383,9 +373,8 @@
       padding: 10px;
       cursor: pointer;
       transition: background 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: block;
+      margin: 0 auto;
     }
     .store-button:hover {
       background: linear-gradient(to bottom, #1f1f1f, #3a3a3a);
@@ -398,23 +387,27 @@
 
     /* === Mines Game Styles === */
     .mines-container {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
       background: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
       padding: 15px 20px;
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(255,255,255,0.1);
       color: #d3d3d3;
-      width: 300px;
+      width: 250px;
       transition: opacity 0.5s ease;
       opacity: 0.8;
     }
     .mines-container:hover { opacity: 1; }
     .mines-header {
       margin-bottom: 10px;
+      text-align: center;
     }
     .mines-title {
       font-size: 20px;
       margin-bottom: 10px;
-      text-align: center;
     }
     .mines-controls {
       display: flex;
@@ -443,16 +436,16 @@
     }
     .mine-grid {
       display: grid;
-      grid-template-columns: repeat(8, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 2px;
     }
     .mine-cell {
-      width: 35px;
-      height: 35px;
+      width: 45px;
+      height: 45px;
       background: #555;
       border: 1px solid #444;
       text-align: center;
-      line-height: 35px;
+      line-height: 45px;
       font-size: 16px;
       cursor: pointer;
       user-select: none;
@@ -492,77 +485,74 @@
     <div class="message">click</div>
   </div>
 
-  <!-- Content Wrapper: Mines Game on Left, Center Stack on Right -->
-  <div class="content-wrapper">
-    <!-- Mines Game Container -->
-    <div class="mines-container">
-      <div class="mines-header">
-        <div class="mines-title">Mines Game</div>
-        <div class="mines-controls">
-          <label for="mine-count-input">Mines:</label>
-          <select id="mine-count-input">
-            <option value="5">5</option>
-            <option value="10" selected>10</option>
-            <option value="15">15</option>
-            <option value="20">20</option>
-          </select>
-          <button id="mines-reset-btn">Reset Game</button>
-        </div>
-        <div class="mines-points">Points: <span id="mines-points-counter">0</span></div>
+  <!-- Mines Game Container (positioned on the left) -->
+  <div class="mines-container" id="mines-container">
+    <div class="mines-header">
+      <div class="mines-title">Mines Game</div>
+      <div class="mines-controls">
+        <label for="mine-count-input">Mines:</label>
+        <select id="mine-count-input">
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+          <option value="8">8</option>
+          <option value="10">10</option>
+        </select>
+        <button id="mines-reset-btn">Reset</button>
       </div>
-      <div class="mine-grid" id="mine-grid"></div>
+      <div class="mines-points">Points: <span id="mines-points-counter">0</span></div>
+    </div>
+    <div class="mine-grid" id="mine-grid"></div>
+  </div>
+
+  <!-- Center Stack: Main Container and Store Container -->
+  <div class="center-stack">
+    <!-- Main Container (Center Window) -->
+    <div class="main-container" id="main-container">
+      <div class="title">dx9g</div>
+      <!-- Discord Profile Section -->
+      <div class="discord-profile">
+        <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/779454e09773e5508c8ef55d74be50f2.webp" alt="Discord Avatar">
+        <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
+      </div>
+      <!-- Bio with Animated Text -->
+      <div class="bio">
+        <span id="bio-typing"></span>
+      </div>
+      <!-- Social Links -->
+      <div class="social-links">
+        <div class="social-icon" id="discord-copy">
+          <img src="https://i.ibb.co/yGKy01d/toppng-com-discord-black-logo-800x800.png" alt="Discord">
+          <div class="tooltip">dx9g</div>
+        </div>
+        <div class="social-icon" id="github-copy">
+          <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
+          <div class="tooltip">dx9g</div>
+        </div>
+        <div class="social-icon" id="roblox-copy">
+          <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
+          <div class="tooltip">izvees</div>
+        </div>
+      </div>
+      <!-- Visitor Counter -->
+      <div id="visitor-counter">
+        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#c0c0c0">
+          <path d="M12 4.5C7.305 4.5 3.06 7.25 1 12c2.06 4.75 6.305 7.5 11 7.5s8.94-2.75 11-7.5c-2.06-4.75-6.305-7.5-11-7.5zM12 17c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
+        </svg>
+        <span id="visitor-count">0</span>
+      </div>
     </div>
 
-    <!-- Center Stack: Main Container and Store Container -->
-    <div class="center-stack">
-      <!-- Main Container (Center Window) -->
-      <div class="main-container" id="main-container">
-        <div class="title">dx9g</div>
-        <!-- Discord Profile Section -->
-        <div class="discord-profile">
-          <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/779454e09773e5508c8ef55d74be50f2.webp" alt="Discord Avatar">
-          <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
-        </div>
-        <!-- Bio with Animated Text -->
-        <div class="bio">
-          <span id="bio-typing"></span>
-        </div>
-        <!-- Social Links -->
-        <div class="social-links">
-          <div class="social-icon" id="discord-copy">
-            <img src="https://i.ibb.co/yGKy01d/toppng-com-discord-black-logo-800x800.png" alt="Discord">
-            <div class="tooltip">dx9g</div>
-          </div>
-          <div class="social-icon" id="github-copy">
-            <img src="https://cdn-icons-png.flaticon.com/512/25/25231.png" alt="GitHub">
-            <div class="tooltip">dx9g</div>
-          </div>
-          <div class="social-icon" id="roblox-copy">
-            <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
-            <div class="tooltip">izvees</div>
-          </div>
-        </div>
-        <!-- Visitor Counter -->
-        <div id="visitor-counter">
-          <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#c0c0c0">
-            <path d="M12 4.5C7.305 4.5 3.06 7.25 1 12c2.06 4.75 6.305 7.5 11 7.5s8.94-2.75 11-7.5c-2.06-4.75-6.305-7.5-11-7.5zM12 17c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
+    <!-- Store Container (Cheap Roblox Accounts) -->
+    <div class="store-container">
+      <div class="store-text">buy cheap roblox accounts</div>
+      <a href="https://cheaprobloxaccounts.sellsn.io/" target="_blank">
+        <button class="store-button">
+          <!-- Shopping Cart Icon (centered) -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 576 512">
+            <path d="M528.12 301.319l47.273-208C579.413 78.517 565.261 64 546.058 64H128L120.586 24.064A24 24 0 0097.246 0H24A24 24 0 000 24v16a24 24 0 0024 24h48.002l70.258 307.347a63.992 63.992 0 0061.483 44.653h248.032a63.992 63.992 0 0061.483-44.653zM160 448a32 32 0 1132-32 32 32 0 01-32 32zm320 0a32 32 0 1132-32 32 32 0 01-32 32z"/>
           </svg>
-          <span id="visitor-count">0</span>
-        </div>
-      </div>
-
-      <!-- Store Container (Cheap Roblox Accounts) -->
-      <div class="store-container">
-        <div class="store-text">buy cheap roblox accounts</div>
-        <a href="https://cheaprobloxaccounts.sellsn.io/" target="_blank">
-          <button class="store-button">
-            <!-- Shopping Cart Icon (Updated) -->
-            <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 576 512">
-              <path d="M528.12 301.319l47.273-208C579.413 78.517 565.261 64 546.058 64H128L120.586 24.064A24 24 0 0097.246 0H24A24 24 0 000 24v16a24 24 0 0024 24h48.002l70.258 307.347a63.992 63.992 0 0061.483 44.653h248.032a63.992 63.992 0 0061.483-44.653zM160 448a32 32 0 1132-32 32 32 0 01-32 32zm320 0a32 32 0 1132-32 32 32 0 01-32 32z"/>
-            </svg>
-          </button>
-        </a>
-      </div>
+        </button>
+      </a>
     </div>
   </div>
 
@@ -700,34 +690,30 @@
     animateBioTexts(bioTyping, bioTexts);
 
     // === Mines Game Code ===
-    const gridSize = 8; // 8x8 grid
-    let mineCount = 10; // default
+    let gridSize = 5; // 5x5 grid
+    let mineCount = 5; // default value
     let gameOver = false;
     let points = 0;
-    let board = []; // 1D array for grid cells
+    let board = []; // 1D array for grid cells: "M" for mine, "S" for safe.
     const mineGrid = document.getElementById('mine-grid');
     const mineCountInput = document.getElementById('mine-count-input');
     const minesResetBtn = document.getElementById('mines-reset-btn');
     const pointsCounter = document.getElementById('mines-points-counter');
 
-    // Return SVG string for mine icon.
+    // Return SVG for mine icon (smooth, white)
     function getMineIcon() {
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
         <path fill="#fff" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm0 448
         c-110.532 0-200-89.468-200-200S145.468 56 256 56s200 89.468 200 200-89.468 200-200 200z"/>
-        <path fill="#fff" d="M340.49 171.51a16 16 0 00-22.627 0l-65.863 65.863-65.863-65.863a16 16 0 
-        10-22.627 22.627l65.863 65.863-65.863 65.863a16 16 0 1022.627 22.627l65.863-65.863 65.863 
-        65.863a16 16 0 0022.627-22.627l-65.863-65.863 65.863-65.863a16 16 0 000-22.627z"/>
+        <path fill="#fff" d="M340.49 171.51a16 16 0 00-22.627 0L256 233.373l-61.863-61.863a16 16 0 00-22.627 22.627L233.373 256l-61.863 
+        61.863a16 16 0 1022.627 22.627L256 278.627l61.863 61.863a16 16 0 0022.627-22.627L278.627 256l61.863-61.863a16 16 0 000-22.627z"/>
       </svg>`;
     }
 
-    // Return SVG string for X icon.
-    function getXIcon() {
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" width="20" height="20">
-        <path fill="#fff" d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 
-        189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 
-        9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.19 12.28 44.48 0L176 322.72l100.07 
-        100.07c12.28 12.28 32.19 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z"/>
+    // Return SVG for star icon (safe cell) - smooth, clean and white.
+    function getStarIcon() {
+      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="20" height="20">
+        <path fill="#fff" d="M287.9 17.8L354 150.2 500.2 171.5c26.2 3.8 36.7 36 17.7 54.6L423 319.8l39.8 232.6c4.5 26.3-23.2 46-46.4 33.7L288 439.6 159.6 585.1c-23.2 12.3-50.9-7.4-46.4-33.7L145 319.8 58.1 226.1c-19-18.6-8.5-50.8 17.7-54.6l146.1-21.3 66.1-132.4c11.7-23.4 45.6-23.4 57.3 0z"/>
       </svg>`;
     }
 
@@ -737,10 +723,9 @@
       points = 0;
       pointsCounter.textContent = points;
       mineGrid.innerHTML = "";
-      board = new Array(gridSize * gridSize).fill(0);
-      // Get selected mine count.
+      board = new Array(gridSize * gridSize).fill("S"); // All cells safe by default.
       mineCount = parseInt(mineCountInput.value);
-      // Place mines randomly.
+      // Randomly place mines.
       let placed = 0;
       while (placed < mineCount) {
         let index = Math.floor(Math.random() * board.length);
@@ -748,24 +733,6 @@
           board[index] = "M";
           placed++;
         }
-      }
-      // For each cell that is not a mine, count adjacent mines.
-      for (let i = 0; i < board.length; i++) {
-        if (board[i] === "M") continue;
-        let count = 0;
-        let row = Math.floor(i / gridSize);
-        let col = i % gridSize;
-        for (let r = -1; r <= 1; r++) {
-          for (let c = -1; c <= 1; c++) {
-            if (r === 0 && c === 0) continue;
-            let newRow = row + r;
-            let newCol = col + c;
-            if (newRow >= 0 && newRow < gridSize && newCol >= 0 && newCol < gridSize) {
-              if (board[newRow * gridSize + newCol] === "M") count++;
-            }
-          }
-        }
-        board[i] = count;
       }
       // Render grid.
       for (let i = 0; i < board.length; i++) {
@@ -783,20 +750,16 @@
       const cell = e.currentTarget;
       const index = parseInt(cell.getAttribute("data-index"));
       if (cell.classList.contains("revealed")) return;
-      // If clicked cell is a mine.
       if (board[index] === "M") {
-        cell.innerHTML = getXIcon();
+        cell.innerHTML = getMineIcon();
         cell.classList.add("revealed");
         revealMines();
         gameOver = true;
-        // Optionally, you can alert "Game Over" here.
-        return;
+        // Optionally alert "Game Over"
       } else {
-        // Safe cell: reveal number.
+        cell.innerHTML = getStarIcon();
         cell.classList.add("revealed", "disabled");
-        const count = board[index];
-        cell.textContent = count === 0 ? "" : count;
-        // Increase points (more mines = higher reward).
+        // Increase points by the selected mine count (harder game yields more points).
         points += mineCount;
         pointsCounter.textContent = points;
       }
@@ -814,13 +777,10 @@
       });
     }
 
-    // Reset game button.
     minesResetBtn.addEventListener("click", initMinesGame);
-    // Also update game when mine count changes.
     mineCountInput.addEventListener("change", initMinesGame);
-
-    // Start the Mines Game on page load.
     initMinesGame();
+
   </script>
 
   <!-- === Firebase Realtime Database Integration for Views === -->
