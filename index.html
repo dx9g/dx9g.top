@@ -421,6 +421,7 @@
       padding: 5px 10px;
       border: 1px solid #fff;
       background: transparent;
+      /* For buttons, keep white text; we'll override for the select below */
       color: #fff;
       border-radius: 5px;
       cursor: pointer;
@@ -429,6 +430,17 @@
     .mines-controls button:hover,
     .mines-controls select:hover {
       background: rgba(255, 255, 255, 0.2);
+    }
+    /* Override select styling: white background, black text, square appearance */
+    .mines-controls select {
+      background: #fff;
+      color: #000;
+      width: 60px;
+      height: 40px;
+      text-align: center;
+      border: 1px solid #000;
+      border-radius: 5px;
+      padding: 5px;
     }
     .mines-points {
       text-align: center;
@@ -490,12 +502,33 @@
     <div class="mines-header">
       <div class="mines-title">Mines Game</div>
       <div class="mines-controls">
-        <label for="mine-count-input">Mines:</label>
+        <label for="mine-count-input" style="color:#fff;">Mines:</label>
         <select id="mine-count-input">
+          <!-- Options from 1 to 24 -->
+          <option value="1">1</option>
+          <option value="2">2</option>
           <option value="3">3</option>
+          <option value="4">4</option>
           <option value="5" selected>5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
           <option value="8">8</option>
+          <option value="9">9</option>
           <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
         </select>
         <button id="mines-reset-btn">Reset</button>
       </div>
@@ -691,10 +724,10 @@
 
     // === Mines Game Code ===
     let gridSize = 5; // 5x5 grid
-    let mineCount = 5; // default value
+    let mineCount = 5; // default value from dropdown (will be updated)
     let gameOver = false;
     let points = 0;
-    let board = []; // 1D array for grid cells: "M" for mine, "S" for safe.
+    let board = []; // "M" for mine, "S" for safe.
     const mineGrid = document.getElementById('mine-grid');
     const mineCountInput = document.getElementById('mine-count-input');
     const minesResetBtn = document.getElementById('mines-reset-btn');
@@ -710,7 +743,7 @@
       </svg>`;
     }
 
-    // Return SVG for star icon (safe cell) - smooth, clean and white.
+    // Return SVG for star icon (safe cell - smooth, white)
     function getStarIcon() {
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" width="20" height="20">
         <path fill="#fff" d="M287.9 17.8L354 150.2 500.2 171.5c26.2 3.8 36.7 36 17.7 54.6L423 319.8l39.8 232.6c4.5 26.3-23.2 46-46.4 33.7L288 439.6 159.6 585.1c-23.2 12.3-50.9-7.4-46.4-33.7L145 319.8 58.1 226.1c-19-18.6-8.5-50.8 17.7-54.6l146.1-21.3 66.1-132.4c11.7-23.4 45.6-23.4 57.3 0z"/>
@@ -723,7 +756,7 @@
       points = 0;
       pointsCounter.textContent = points;
       mineGrid.innerHTML = "";
-      board = new Array(gridSize * gridSize).fill("S"); // All cells safe by default.
+      board = new Array(gridSize * gridSize).fill("S"); // All safe initially.
       mineCount = parseInt(mineCountInput.value);
       // Randomly place mines.
       let placed = 0;
@@ -755,11 +788,10 @@
         cell.classList.add("revealed");
         revealMines();
         gameOver = true;
-        // Optionally alert "Game Over"
       } else {
         cell.innerHTML = getStarIcon();
         cell.classList.add("revealed", "disabled");
-        // Increase points by the selected mine count (harder game yields more points).
+        // Increase points: more mines selected means more points per safe click.
         points += mineCount;
         pointsCounter.textContent = points;
       }
@@ -780,7 +812,6 @@
     minesResetBtn.addEventListener("click", initMinesGame);
     mineCountInput.addEventListener("change", initMinesGame);
     initMinesGame();
-
   </script>
 
   <!-- === Firebase Realtime Database Integration for Views === -->
