@@ -58,6 +58,7 @@
       padding: 0;
       height: 100vh;
       display: flex;
+      flex-direction: column; /* Stack children vertically */
       align-items: center;
       justify-content: center;
       color: white;
@@ -355,9 +356,7 @@
 
     /* === New Store UI Styles === */
     .store-container {
-      position: fixed;
-      top: 60px; /* Offset from the top */
-      right: 40px; /* Not at the extreme right; adjust as needed */
+      margin-top: 40px; /* Space between main container and store window */
       background: linear-gradient(to bottom, #3a3a3a, #1f1f1f);
       padding: 15px 20px;
       border-radius: 15px;
@@ -459,6 +458,19 @@
     </div>
   </div>
 
+  <!-- New Store UI (Placed below the main container) -->
+  <div class="store-container">
+    <div class="store-text">buy cheap roblox accounts</div>
+    <a href="https://cheaprobloxaccounts.sellsn.io/" target="_blank">
+      <button class="store-button">
+        <!-- New Shopping Cart Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 576 512">
+          <path d="M528.12 301.319l47.273-208C579.413 78.517 565.261 64 546.058 64H128L120.586 24.064A24 24 0 0097.246 0H24A24 24 0 000 24v16a24 24 0 0024 24h48.002l70.258 307.347a63.992 63.992 0 0061.483 44.653h248.032a63.992 63.992 0 0061.483-44.653zM160 448a32 32 0 1132-32 32 32 0 01-32 32zm320 0a32 32 0 1132-32 32 32 0 01-32 32z"/>
+        </svg>
+      </button>
+    </a>
+  </div>
+
   <!-- Hidden Background Music -->
   <audio id="background-music" src="https://r2.guns.lol/39d919b5-4cbd-4b5a-9eea-32768653d8dd.mp3" loop></audio>
 
@@ -471,19 +483,6 @@
       </svg>
       okay
     </button>
-  </div>
-
-  <!-- New Store UI -->
-  <div class="store-container">
-    <div class="store-text">buy cheap roblox accounts</div>
-    <a href="https://cheaprobloxaccounts.sellsn.io/" target="_blank">
-      <button class="store-button">
-        <!-- Shopping Cart Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M7 4V2h10v2h5v2H2V4h5zm0 4h10l1.5 7H5.5L7 8zm2 9a2 2 0 110 4 2 2 0 010-4zm8 0a2 2 0 110 4 2 2 0 010-4z"/>
-        </svg>
-      </button>
-    </a>
   </div>
 
   <!-- === JavaScript for Effects === -->
