@@ -53,8 +53,8 @@
     .overlay .message {
       font-size: 48px;
       color: #000;
-      /* Added subtle glow */
-      text-shadow: 0 0 4px black;
+      /* Changed glow to white bright glow */
+      text-shadow: 0 0 8px #fff;
     }
     
     /* Body Layout */
@@ -93,6 +93,7 @@
       height: 24px;
       fill: #808080;
       transition: fill 0.3s ease;
+      /* UI controls keep their original styling */
     }
     #speaker-icon:hover {
       fill: #fff;
@@ -286,10 +287,10 @@
       font-weight: bold;
       min-height: 30px;
     }
-    /* Added subtle glow for "dx9g" text */
+    /* Changed glow for username text to white bright glow */
     .username {
       color: #000;
-      text-shadow: 0 0 4px black;
+      text-shadow: 0 0 8px #fff;
     }
     .user-info .bio {
       font-size: 14px;
@@ -297,7 +298,7 @@
       min-height: 24px;
       line-height: 24px;
       color: #000;
-      text-shadow: 0 0 4px black;
+      text-shadow: 0 0 8px #fff;
     }
     
     /* Discord Profile & Decoration */
@@ -338,8 +339,8 @@
       width: 40px;
       height: 40px;
       transition: transform 0.3s;
-      /* Add subtle glow for icons */
-      filter: drop-shadow(0 0 4px black);
+      /* Changed icon glow to white bright glow */
+      filter: drop-shadow(0 0 8px #fff);
     }
     .social-icon:hover img {
       transform: scale(1.1);
@@ -359,6 +360,8 @@
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
       z-index: 10002;
+      /* White glow for tooltip text */
+      text-shadow: 0 0 8px #fff;
     }
     .social-icon:hover .tooltip {
       opacity: 1;
@@ -386,24 +389,20 @@
       gap: 5px;
       font-size: 16px;
       color: #fff;
+      /* White bright glow for visitor counter text */
+      text-shadow: 0 0 8px #fff;
     }
     #eye-icon {
       width: 24px;
       height: 24px;
       fill: #000;
-      /* Add subtle glow for visitor icon */
-      filter: drop-shadow(0 0 4px black);
+      /* Changed visitor icon glow to white bright glow */
+      filter: drop-shadow(0 0 8px #fff);
       transition: fill 0.3s ease;
     }
     #eye-icon:hover {
       fill: #000;
     }
-    /* Add subtle glow for visitor count text */
-    #visitor-count {
-      color: #000;
-      text-shadow: 0 0 4px black;
-    }
-    
     /* Copy Popup - Transparent & Blurred */
     #copy-popup {
       position: fixed;
@@ -422,6 +421,8 @@
       z-index: 10006;
       text-align: center;
       min-width: 200px;
+      /* White bright glow for copy popup text */
+      text-shadow: 0 0 8px #fff;
     }
     #copy-popup.show {
       opacity: 1;
@@ -446,7 +447,38 @@
       fill: #808080;
     }
     
-    /* --- Store Container Removed --- */
+    /* --- Additional White Glow for Content Elements --- */
+    /* This adds a white bright glow to all primary content texts and icons */
+    .main-container,
+    .header-section,
+    .user-info,
+    .social-links,
+    #visitor-counter,
+    .overlay,
+    #copy-popup {
+      text-shadow: 0 0 8px #fff;
+    }
+    .main-container svg,
+    .overlay svg,
+    .social-links svg,
+    #visitor-counter svg,
+    #copy-popup svg {
+      filter: drop-shadow(0 0 8px #fff);
+    }
+    .social-links img,
+    .discord-avatar,
+    .discord-decoration {
+      filter: drop-shadow(0 0 8px #fff);
+    }
+    
+    /* Exclude UI controls (like slider thumbs) from the glow */
+    #volume-slider::-webkit-slider-thumb,
+    #volume-slider::-moz-range-thumb,
+    #brightness-slider::-webkit-slider-thumb,
+    #brightness-slider::-moz-range-thumb {
+      filter: none;
+      text-shadow: none;
+    }
   </style>
 </head>
 <body>
