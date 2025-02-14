@@ -29,8 +29,8 @@
       min-height: 100vh;
       object-fit: cover;
       z-index: -2;
-      /* Darken the background video slightly */
-      filter: brightness(0.95);
+      /* Darkened even further */
+      filter: brightness(0.85);
     }
     
     /* Overlay */
@@ -253,8 +253,8 @@
       min-height: 350px;
       transition: all 0.3s ease;
       will-change: transform;
-      /* Darken the main container (changed from brightness(110%) to 95%) */
-      filter: brightness(95%);
+      /* Further darkened main container */
+      filter: brightness(85%);
     }
     @media (max-width: 700px) {
       .main-container {
@@ -511,8 +511,8 @@
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"/>
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"/>
     </svg>
-    <!-- Changed default value to 95 for a darker tone -->
-    <input type="range" id="brightness-slider" min="50" max="150" value="95">
+    <!-- Set brightness slider default to 85 -->
+    <input type="range" id="brightness-slider" min="50" max="150" value="85">
   </div>
   
   <!-- Overlay (click to remove and activate sound) -->
