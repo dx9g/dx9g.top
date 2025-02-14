@@ -29,7 +29,6 @@
       min-height: 100vh;
       object-fit: cover;
       z-index: -2;
-      /* Darkened even further: 70% brightness */
       filter: brightness(0.70);
     }
     
@@ -252,7 +251,6 @@
       min-height: 350px;
       transition: all 0.3s ease;
       will-change: transform;
-      /* Further darkened main container: 70% brightness */
       filter: brightness(70%);
     }
     @media (max-width: 700px) {
@@ -307,8 +305,8 @@
     .badge {
       width: 20px;
       height: 20px;
-      filter: drop-shadow(0 0 8px #fff);
       cursor: default;
+      filter: drop-shadow(0 0 8px #fff);
     }
     /* Tooltip popup for badge */
     .badge-tooltip {
@@ -528,7 +526,6 @@
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"/>
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"/>
     </svg>
-    <!-- Set brightness slider default to 70 -->
     <input type="range" id="brightness-slider" min="50" max="150" value="70">
   </div>
   
@@ -550,14 +547,12 @@
         </div>
         <div class="user-info">
           <div class="username-row">
-            <span class="username">@dx9g</span>
+            <span class="username">dx9g</span>
             <!-- Badges Container -->
             <div class="badges">
               <!-- Premium Badge Container with Tooltip -->
               <div class="badge-container">
-                <svg class="badge premium" viewBox="0 0 24 24">
-                  <polygon points="12,2 22,12 12,22 2,12" fill="white" stroke="white" stroke-width="2"/>
-                </svg>
+                <img class="badge premium" src="https://cdn-icons-png.flaticon.com/512/20/20227.png" alt="Premium Badge">
                 <div class="badge-tooltip">premium</div>
               </div>
               <!-- Additional badges can be added here -->
@@ -663,13 +658,13 @@
     
     // Social icons now open a new tab with your profile links.
     document.getElementById('discord-copy').addEventListener('click', () => { 
-      window.open('link_here', '_blank'); 
+      window.open('https://discord.com/channels/@me/1340049718922711090', '_blank'); 
     });
     document.getElementById('github-copy').addEventListener('click', () => { 
-      window.open('link_here', '_blank'); 
+      window.open('https://github.com/dx9g', '_blank'); 
     });
     document.getElementById('roblox-copy').addEventListener('click', () => { 
-      window.open('link_here', '_blank'); 
+      window.open('https://www.roblox.com/users/253146125/profile', '_blank'); 
     });
     
     // Volume slider functionality
@@ -714,27 +709,19 @@
     
     // Animated page title effect with smooth typing & erasing
     (function animateTitle() {
-      // Add or modify the texts below as needed.
       const titles = ["@dx9g", "dx9g.top"];
-      
-      // Adjust these constants to control the animation speed and pauses:
-      const TYPING_SPEED = 200;      // Delay (ms) between each character while typing
-      const ERASING_SPEED = 100;     // Delay (ms) between each character while erasing
-      const PAUSE_AFTER_TYPING = 1000; // Pause (ms) after finishing typing before erasing
-      const PAUSE_AFTER_ERASING = 500; // Pause (ms) after erasing before typing next text
-      
+      const TYPING_SPEED = 200;
+      const ERASING_SPEED = 100;
+      const PAUSE_AFTER_TYPING = 1000;
+      const PAUSE_AFTER_ERASING = 500;
       let currentTitleIndex = 0;
       let currentCharIndex = 0;
       let isDeleting = false;
-      
       function updateTitle() {
         const currentTitle = titles[currentTitleIndex];
-        
         if (!isDeleting) {
-          // Typing: increase the character count
           currentCharIndex++;
           if (currentCharIndex > currentTitle.length) {
-            // Pause before starting to erase
             setTimeout(() => {
               isDeleting = true;
               updateTitle();
@@ -742,24 +729,17 @@
             return;
           }
         } else {
-          // Erasing: decrease the character count
           currentCharIndex--;
           if (currentCharIndex < 0) {
-            // Move to the next title and pause before typing
             isDeleting = false;
             currentTitleIndex = (currentTitleIndex + 1) % titles.length;
             setTimeout(updateTitle, PAUSE_AFTER_ERASING);
             return;
           }
         }
-        
-        // Update the document's title with the current substring.
         document.title = currentTitle.substring(0, currentCharIndex);
-        
-        // Set the next update with appropriate speed.
         setTimeout(updateTitle, isDeleting ? ERASING_SPEED : TYPING_SPEED);
       }
-      
       updateTitle();
     })();
   </script>
