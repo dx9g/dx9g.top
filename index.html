@@ -29,6 +29,8 @@
       min-height: 100vh;
       object-fit: cover;
       z-index: -2;
+      /* Darken the background video slightly */
+      filter: brightness(0.95);
     }
     
     /* Overlay */
@@ -53,7 +55,7 @@
     .overlay .message {
       font-size: 48px;
       color: #000;
-      /* Changed glow to white bright glow */
+      /* White bright glow */
       text-shadow: 0 0 8px #fff;
     }
     
@@ -93,7 +95,6 @@
       height: 24px;
       fill: #808080;
       transition: fill 0.3s ease;
-      /* UI controls keep their original styling */
     }
     #speaker-icon:hover {
       fill: #fff;
@@ -252,7 +253,8 @@
       min-height: 350px;
       transition: all 0.3s ease;
       will-change: transform;
-      filter: brightness(110%);
+      /* Darken the main container (changed from brightness(110%) to 95%) */
+      filter: brightness(95%);
     }
     @media (max-width: 700px) {
       .main-container {
@@ -287,7 +289,7 @@
       font-weight: bold;
       min-height: 30px;
     }
-    /* Changed glow for username text to white bright glow */
+    /* White bright glow for username text */
     .username {
       color: #000;
       text-shadow: 0 0 8px #fff;
@@ -339,7 +341,7 @@
       width: 40px;
       height: 40px;
       transition: transform 0.3s;
-      /* Changed icon glow to white bright glow */
+      /* White bright glow for icons */
       filter: drop-shadow(0 0 8px #fff);
     }
     .social-icon:hover img {
@@ -360,7 +362,6 @@
       pointer-events: none;
       transition: opacity 0.3s ease, transform 0.3s ease;
       z-index: 10002;
-      /* White glow for tooltip text */
       text-shadow: 0 0 8px #fff;
     }
     .social-icon:hover .tooltip {
@@ -389,14 +390,12 @@
       gap: 5px;
       font-size: 16px;
       color: #fff;
-      /* White bright glow for visitor counter text */
       text-shadow: 0 0 8px #fff;
     }
     #eye-icon {
       width: 24px;
       height: 24px;
       fill: #000;
-      /* Changed visitor icon glow to white bright glow */
       filter: drop-shadow(0 0 8px #fff);
       transition: fill 0.3s ease;
     }
@@ -421,7 +420,6 @@
       z-index: 10006;
       text-align: center;
       min-width: 200px;
-      /* White bright glow for copy popup text */
       text-shadow: 0 0 8px #fff;
     }
     #copy-popup.show {
@@ -448,7 +446,6 @@
     }
     
     /* --- Additional White Glow for Content Elements --- */
-    /* This adds a white bright glow to all primary content texts and icons */
     .main-container,
     .header-section,
     .user-info,
@@ -514,7 +511,8 @@
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"/>
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"/>
     </svg>
-    <input type="range" id="brightness-slider" min="50" max="150" value="110">
+    <!-- Changed default value to 95 for a darker tone -->
+    <input type="range" id="brightness-slider" min="50" max="150" value="95">
   </div>
   
   <!-- Overlay (click to remove and activate sound) -->
