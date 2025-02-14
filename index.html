@@ -167,7 +167,7 @@
     
     /* === Main Container (Center Window) === */
     .main-container {
-      background: rgba(20,20,20,0.4);
+      background: rgba(30,30,30,0.5);
       backdrop-filter: blur(10px);
       padding: 30px 40px;
       border-radius: 20px;
@@ -211,7 +211,7 @@
       min-height: 30px;
     }
     .username {
-      /* Keep the username and badges together */
+      /* Keep username and badges together */
     }
     /* Badges next to the username */
     .user-badge {
@@ -224,15 +224,20 @@
       background: transparent;
       font-size: 16px;
       cursor: default;
-      /* By default, badges have white glow */
       text-shadow: 0 0 8px #fff;
     }
-    /* Rich badge: change the dollar sign to black with black glow */
+    /* Make the rich badge (dollar icon) 2x bigger */
     #badge-rich {
+      width: 32px;
+      height: 32px;
       color: #000;
       text-shadow: 0 0 8px #000;
     }
-    /* Verified badge: now a simple black checkmark with black glow */
+    #badge-rich .badge-icon {
+      font-size: 32px;
+      line-height: 32px;
+    }
+    /* Verified badge: black checkmark with black glow */
     #badge-verified svg {
       fill: #000;
       filter: drop-shadow(0 0 6px rgba(0,0,0,0.9))
@@ -263,7 +268,6 @@
       font-size: 14px;
       margin-top: 4px;
       min-height: 24px;
-      /* Optionally, set a fixed line-height */
       line-height: 24px;
     }
     
@@ -406,7 +410,7 @@
     
     /* === Store UI Styles === */
     .store-container {
-      background: rgba(20,20,20,0.4);
+      background: rgba(30,30,30,0.5);
       backdrop-filter: blur(10px);
       padding: 15px 20px;
       border-radius: 15px;
@@ -425,7 +429,7 @@
       margin-bottom: 10px;
     }
     .store-button {
-      background: rgba(20,20,20,0.4);
+      background: rgba(30,30,30,0.5);
       backdrop-filter: blur(10px);
       border: none;
       border-radius: 10px;
@@ -436,7 +440,7 @@
       margin: 0 auto;
     }
     .store-button:hover {
-      background: rgba(20,20,20,0.6);
+      background: rgba(30,30,30,0.7);
     }
     .store-button svg {
       width: 24px;
@@ -485,7 +489,7 @@
         <div class="user-info">
           <div class="username-row">
             <span class="username">dx9g</span>
-            <!-- Rich badge: black dollar sign with black glow -->
+            <!-- Rich badge: black dollar sign with black glow, 2x bigger -->
             <span class="user-badge" id="badge-rich">
               <span class="badge-icon">$</span>
               <span class="tooltip">rich</span>
@@ -627,7 +631,7 @@
       if(bgMusic) { bgMusic.volume = vol; }
     });
     
-    // Animate bio text (typewriter effect).
+    // Animate bio text (typewriter effect) without shifting layout.
     function animateBioTexts(element, texts) {
       let index = 0;
       let currentChar = 0;
