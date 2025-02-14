@@ -29,8 +29,8 @@
       min-height: 100vh;
       object-fit: cover;
       z-index: -2;
-      /* Darkened even further */
-      filter: brightness(0.85);
+      /* Darkened even further: 70% brightness */
+      filter: brightness(0.70);
     }
     
     /* Overlay */
@@ -55,7 +55,6 @@
     .overlay .message {
       font-size: 48px;
       color: #000;
-      /* White bright glow */
       text-shadow: 0 0 8px #fff;
     }
     
@@ -253,8 +252,8 @@
       min-height: 350px;
       transition: all 0.3s ease;
       will-change: transform;
-      /* Further darkened main container */
-      filter: brightness(85%);
+      /* Further darkened main container: 70% brightness */
+      filter: brightness(70%);
     }
     @media (max-width: 700px) {
       .main-container {
@@ -289,7 +288,6 @@
       font-weight: bold;
       min-height: 30px;
     }
-    /* White bright glow for username text */
     .username {
       color: #000;
       text-shadow: 0 0 8px #fff;
@@ -341,7 +339,6 @@
       width: 40px;
       height: 40px;
       transition: transform 0.3s;
-      /* White bright glow for icons */
       filter: drop-shadow(0 0 8px #fff);
     }
     .social-icon:hover img {
@@ -511,8 +508,8 @@
       <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2" stroke-linecap="round"/>
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2" stroke-linecap="round"/>
     </svg>
-    <!-- Set brightness slider default to 85 -->
-    <input type="range" id="brightness-slider" min="50" max="150" value="85">
+    <!-- Set brightness slider default to 70 -->
+    <input type="range" id="brightness-slider" min="50" max="150" value="70">
   </div>
   
   <!-- Overlay (click to remove and activate sound) -->
