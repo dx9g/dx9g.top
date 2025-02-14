@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>@dx9g</title>
+  <title>dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
     /* === Font & Global Styles === */
@@ -412,48 +412,6 @@
     #eye-icon:hover {
       fill: #000;
     }
-    /* Copy Popup - Transparent & Blurred */
-    #copy-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(255,255,255,0);
-      backdrop-filter: blur(4px);
-      color: #000;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
-      z-index: 10006;
-      text-align: center;
-      min-width: 200px;
-      text-shadow: 0 0 8px #fff;
-    }
-    #copy-popup.show {
-      opacity: 1;
-      visibility: visible;
-      transform: translate(-50%, -50%) scale(1);
-    }
-    #copy-popup button {
-      background: none;
-      border: none;
-      color: #000;
-      font-size: 14px;
-      margin: 15px auto 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
-    #copy-popup button .checkmark {
-      width: 20px;
-      height: 20px;
-      fill: #808080;
-    }
     
     /* --- Additional White Glow for Content Elements --- */
     .main-container,
@@ -461,15 +419,13 @@
     .user-info,
     .social-links,
     #visitor-counter,
-    .overlay,
-    #copy-popup {
+    .overlay {
       text-shadow: 0 0 8px #fff;
     }
     .main-container svg,
     .overlay svg,
     .social-links svg,
-    #visitor-counter svg,
-    #copy-popup svg {
+    #visitor-counter svg {
       filter: drop-shadow(0 0 8px #fff);
     }
     .social-links img,
@@ -543,7 +499,7 @@
         </div>
         <div class="user-info">
           <div class="username-row">
-            <span class="username">dx9g</span>
+            <span class="username">@dx9g</span>
           </div>
           <div class="bio">
             <span id="bio-typing"></span>
@@ -586,17 +542,6 @@
   
   <!-- Hidden Background Music -->
   <audio id="background-music" src="https://r2.guns.lol/d7169975-b312-4c2c-9ef1-943cf96ae399.mp3" loop></audio>
-  
-  <!-- Copy Popup -->
-  <div id="copy-popup">
-    <div>Copied to clipboard</div>
-    <button id="copy-popup-close">
-      <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-      </svg>
-      okay
-    </button>
-  </div>
   
   <!-- JavaScript for Effects & Interactions -->
   <script>
@@ -654,18 +599,16 @@
       mainContainer.style.filter = `brightness(${this.value}%)`;
     });
     
-    // Copy-to-clipboard functionality
-    function copyUsername(username) {
-      navigator.clipboard.writeText(username).then(() => {
-        copyPopup.classList.add("show");
-      }).catch(err => { console.error("Failed to copy: ", err); });
-    }
-    const copyPopup = document.getElementById('copy-popup');
-    const copyPopupClose = document.getElementById('copy-popup-close');
-    copyPopupClose.addEventListener('click', () => { copyPopup.classList.remove("show"); });
-    document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
-    document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
-    document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
+    // Social icons now open a new tab with your profile links.
+    document.getElementById('discord-copy').addEventListener('click', () => { 
+      window.open('https://www.roblox.com/users/253146125/profile', '_blank'); 
+    });
+    document.getElementById('github-copy').addEventListener('click', () => { 
+      window.open('https://github.com/dx9g', '_blank'); 
+    });
+    document.getElementById('roblox-copy').addEventListener('click', () => { 
+      window.open('https://discord.com/channels/@me/1340049718922711090', '_blank'); 
+    });
     
     // Volume slider functionality
     const volumeSlider = document.getElementById('volume-slider');
