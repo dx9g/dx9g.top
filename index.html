@@ -689,32 +689,54 @@
     const bioTyping = document.getElementById('bio-typing');
     animateBioTexts(bioTyping, bioTexts);
     
-    // Animated page title effect
+    // Animated page title effect with smooth typing & erasing
     (function animateTitle() {
-      const fullText = "@dx9g";
-      let currentIndex = 0;
-      let deleting = false;
+      // Add or modify the texts below as needed.
+      const titles = ["@dx9g", "dx9g.top"];
+      
+      // Adjust these constants to control the animation speed and pauses:
+      const TYPING_SPEED = 300;      // Delay (ms) between each character while typing
+      const ERASING_SPEED = 160;     // Delay (ms) between each character while erasing
+      const PAUSE_AFTER_TYPING = 860; // Pause (ms) after finishing typing before erasing
+      const PAUSE_AFTER_ERASING = 460; // Pause (ms) after erasing before typing next text
+      
+      let currentTitleIndex = 0;
+      let currentCharIndex = 0;
+      let isDeleting = false;
+      
       function updateTitle() {
-        if (!deleting) {
-          currentIndex++;
-          if (currentIndex > fullText.length) {
+        const currentTitle = titles[currentTitleIndex];
+        
+        if (!isDeleting) {
+          // Typing: increase the character count
+          currentCharIndex++;
+          if (currentCharIndex > currentTitle.length) {
+            // Pause before starting to erase
             setTimeout(() => {
-              deleting = true;
+              isDeleting = true;
               updateTitle();
-            }, 1000);
+            }, PAUSE_AFTER_TYPING);
             return;
           }
         } else {
-          currentIndex--;
-          if (currentIndex < 0) {
-            deleting = false;
-            setTimeout(updateTitle, 500);
+          // Erasing: decrease the character count
+          currentCharIndex--;
+          if (currentCharIndex < 0) {
+            // Move to the next title and pause before typing
+            isDeleting = false;
+            currentTitleIndex = (currentTitleIndex + 1) % titles.length;
+            setTimeout(updateTitle, PAUSE_AFTER_ERASING);
             return;
           }
         }
-        document.title = fullText.substring(0, currentIndex);
-        setTimeout(updateTitle, deleting ? 100 : 200);
+        
+        // Update the document's title with the current substring.
+        document.title = currentTitle.substring(0, currentCharIndex);
+        
+        // Set the next update with appropriate speed.
+        setTimeout(updateTitle, isDeleting ? ERASING_SPEED : TYPING_SPEED);
       }
+      
       updateTitle();
     })();
   </script>
