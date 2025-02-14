@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dx9g</title>
+  <title>@dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
     /* === Font & Global Styles === */
@@ -322,6 +322,19 @@
       pointer-events: none;
     }
     
+    /* Roblox Avatar Container */
+    .roblox-avatar-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .roblox-avatar-container img {
+      max-width: 100%;
+      height: auto;
+      background: none;
+    }
+    
     /* Social Links (Bottom) */
     .social-links {
       display: flex;
@@ -538,6 +551,11 @@
         </div>
       </div>
       
+      <!-- Roblox Avatar in the center -->
+      <div class="roblox-avatar-container">
+        <img src="https://tr.rbxcdn.com/30DAY-Avatar-A6FE31DDB5D283A13E0865B5661AE9D2-Png/352/352/Avatar/Webp/noFilter" alt="Roblox Avatar">
+      </div>
+      
       <div class="spacer"></div>
       
       <!-- Social Links (Bottom) -->
@@ -685,7 +703,7 @@
       }
       type();
     }
-    const bioTexts = ["hey", "@dx9g on discord", "obsessed with money", "in roblox exploiting community since late 2019"];
+    const bioTexts = ["hey", "@dx9g on discord", "obsessed with money"];
     const bioTyping = document.getElementById('bio-typing');
     animateBioTexts(bioTyping, bioTexts);
     
@@ -695,10 +713,10 @@
       const titles = ["@dx9g", "dx9g.top"];
       
       // Adjust these constants to control the animation speed and pauses:
-      const TYPING_SPEED = 300;      // Delay (ms) between each character while typing
-      const ERASING_SPEED = 160;     // Delay (ms) between each character while erasing
-      const PAUSE_AFTER_TYPING = 860; // Pause (ms) after finishing typing before erasing
-      const PAUSE_AFTER_ERASING = 460; // Pause (ms) after erasing before typing next text
+      const TYPING_SPEED = 200;      // Delay (ms) between each character while typing
+      const ERASING_SPEED = 100;     // Delay (ms) between each character while erasing
+      const PAUSE_AFTER_TYPING = 1000; // Pause (ms) after finishing typing before erasing
+      const PAUSE_AFTER_ERASING = 500; // Pause (ms) after erasing before typing next text
       
       let currentTitleIndex = 0;
       let currentCharIndex = 0;
