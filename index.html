@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dx9g</title>
+  <title>@dx9g</title>
   <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/25/25231.png" />
   <style>
     /* === Font & Global Styles === */
@@ -277,6 +277,7 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
     }
     .username-row {
       display: flex;
@@ -285,11 +286,41 @@
       font-size: 24px;
       font-weight: bold;
       min-height: 30px;
+      position: relative;
     }
     .username {
       color: #000;
       text-shadow: 0 0 8px #fff;
+      cursor: default;
     }
+    /* Username Popup Tooltip */
+    .username-popup {
+      position: relative;
+      display: inline-block;
+    }
+    .username-tooltip {
+      visibility: hidden;
+      background-color: rgba(255,255,255,0.9);
+      color: #000;
+      text-align: center;
+      border-radius: 4px;
+      padding: 5px 8px;
+      position: absolute;
+      z-index: 1;
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      white-space: nowrap;
+      font-size: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .username-popup:hover .username-tooltip {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
     /* Badges next to username */
     .badges {
       display: flex;
@@ -311,7 +342,7 @@
     /* Tooltip popup for badge */
     .badge-tooltip {
       visibility: hidden;
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: rgba(255,255,255,0.9);
       color: #000;
       text-align: center;
       border-radius: 4px;
@@ -320,11 +351,11 @@
       z-index: 1;
       bottom: 125%; /* position above the icon */
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) translateY(10px);
       white-space: nowrap;
       font-size: 10px;
       opacity: 0;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .badge-tooltip::after {
       content: "";
@@ -339,6 +370,7 @@
     .badge-container:hover .badge-tooltip {
       visibility: visible;
       opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
     
     .user-info .bio {
@@ -547,7 +579,10 @@
         </div>
         <div class="user-info">
           <div class="username-row">
-            <span class="username">dx9g</span>
+            <span class="username-popup">
+              <span class="username">dx9g</span>
+              <div class="username-tooltip">UID #1</div>
+            </span>
             <!-- Badges Container -->
             <div class="badges">
               <!-- Premium Badge Container with Tooltip -->
@@ -559,6 +594,11 @@
               <div class="badge-container">
                 <img class="badge" src="https://vectorseek.com/wp-content/uploads/2023/07/Roblox-Premium-Logo-Vector.svg-.png" alt="Roblox Premium Badge">
                 <div class="badge-tooltip">roblox premium</div>
+              </div>
+              <!-- Verified Badge Container with Tooltip -->
+              <div class="badge-container">
+                <img class="badge" src="https://www.freeiconspng.com/uploads/check-mark-in-black-icon-8.png" alt="Verified Badge">
+                <div class="badge-tooltip">verified</div>
               </div>
             </div>
           </div>
