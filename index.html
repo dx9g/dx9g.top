@@ -70,7 +70,7 @@
       position: relative;
     }
     
-    /* Music Control Panel (moved to top left) */
+    /* Music Control Panel (Top Left) */
     #music-controls {
       position: fixed;
       top: 10px;
@@ -179,6 +179,8 @@
       position: relative;
       border: 1px solid rgba(255,255,255,0.1);
       color: #fff;
+      /* Force a stable, larger vertical size */
+      min-height: 350px;
     }
     
     /* Header Section inside Center Window */
@@ -242,9 +244,9 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    /* Extra glowing style for verified badge */
-    #badge-verified {
-      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    /* For verified badge, use a custom glowing SVG icon */
+    #badge-verified svg {
+      display: block;
     }
     
     /* Smaller bio text */
@@ -475,9 +477,11 @@
               <span class="badge-icon">$</span>
               <span class="tooltip">rich</span>
             </span>
-            <!-- Verified badge -->
+            <!-- Verified badge with custom glowing SVG -->
             <span class="user-badge" id="badge-verified">
-              <span class="badge-icon">&#10004;</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                <path fill="#fff" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1.41 15.59l-3.18-3.18 1.41-1.41 1.77 1.77 4.59-4.59 1.41 1.41-6 6z"/>
+              </svg>
               <span class="tooltip">verified</span>
             </span>
             <!-- Premium badge -->
