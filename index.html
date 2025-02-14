@@ -12,13 +12,15 @@
       font-family: 'Aoki Regular';
       src: url('Aoki Regular.otf') format('opentype');
     }
-    * { font-family: 'Aoki Regular', sans-serif; }
-
+    * {
+      font-family: 'Aoki Regular', sans-serif;
+    }
+    
     /* Custom Cursor */
     body, * {
       cursor: url('https://r2.guns.lol/2332d4e0-b0b9-4119-bfff-9e2cc467e05e.png') 16 16, auto;
     }
-
+    
     /* Background Video */
     .bg-video {
       position: fixed;
@@ -29,7 +31,7 @@
       object-fit: cover;
       z-index: -2;
     }
-
+    
     /* Overlay */
     .overlay {
       position: fixed;
@@ -45,13 +47,16 @@
       z-index: 10005;
       transition: opacity 0.5s ease;
     }
-    .overlay.hidden { opacity: 0; pointer-events: none; }
+    .overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
     .overlay .message {
       font-size: 48px;
       color: #ffffff;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     }
-
+    
     /* Body & Overall Layout */
     body {
       margin: 0;
@@ -61,74 +66,105 @@
       align-items: center;
       justify-content: center;
       background: #000;
-      color: white;
       overflow: hidden;
       position: relative;
     }
-
-    /* Badge (replacing the Mines Game) */
-    .badge {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(5px);
-      color: #fff;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: bold;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      z-index: 10007;
-    }
-
-    /* Center Stack: Contains main container & store container; centered horizontally */
+    
+    /* Center Stack: Contains main & store containers; centered horizontally */
     .center-stack {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 40px;
     }
-
+    
     /* === Main Container (Center Window) === */
     .main-container {
-      background: rgba(30,30,30,0.3);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(12px);
-      padding: 20px 30px;
+      padding: 30px 40px;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
       width: 600px;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      animation: fadeIn 3s ease-in-out;
-      transform-style: preserve-3d;
-      perspective: 1000px;
-      will-change: transform;
-      z-index: 10001;
       position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(0,0,0,0.1);
+      color: #000;  /* All text here will be black */
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    .title {
-      font-size: 32px;
-      font-weight: 600;
-      color: #d3d3d3;
-      text-shadow: 2px 2px 4px rgba(255,255,255,0.1);
+    
+    /* New header section inside the center window */
+    .header-section {
+      display: flex;
+      align-items: center;
+      gap: 20px;
       margin-bottom: 20px;
-      text-align: center;
-      width: 100%;
     }
-
-    /* === Discord Profile & Bio === */
+    .profile-picture {
+      flex: 0 0 auto;
+      position: relative;
+    }
+    .user-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .username-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+    .username {
+      /* spacing already provided via gap */
+    }
+    /* Badges next to the username */
+    .user-badge {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: transparent;
+      color: #fff; /* Badge icons are white */
+      font-size: 16px;
+      cursor: default;
+      text-shadow: 0 0 8px #fff; /* glowing white effect */
+    }
+    .user-badge .tooltip {
+      position: absolute;
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: #fff;
+      color: #000;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .user-badge:hover .tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    /* Smaller bio text */
+    .user-info .bio {
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    
+    /* === Discord Profile & Decoration === */
     .discord-profile {
       position: relative;
       width: 80px;
       height: 80px;
-      margin-bottom: 15px;
     }
     .discord-avatar {
       width: 80px;
@@ -144,17 +180,7 @@
       height: 80px;
       pointer-events: none;
     }
-    .bio {
-      font-size: 18px;
-      text-align: center;
-      min-height: 30px;
-    }
-    #bio-typing {
-      display: inline-block;
-      color: black;
-      font-size: 24px;
-    }
-
+    
     /* === Social Links === */
     .social-links {
       display: flex;
@@ -173,7 +199,9 @@
       height: 40px;
       transition: transform 0.3s;
     }
-    .social-icon:hover img { transform: scale(1.1); }
+    .social-icon:hover img {
+      transform: scale(1.1);
+    }
     .social-icon .tooltip {
       position: absolute;
       top: 110%;
@@ -205,7 +233,7 @@
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
-
+    
     /* === Visitor Counter === */
     #visitor-counter {
       position: absolute;
@@ -215,16 +243,18 @@
       align-items: center;
       gap: 5px;
       font-size: 16px;
-      color: #c0c0c0;
+      color: #000;
     }
     #eye-icon {
       width: 24px;
       height: 24px;
-      fill: #c0c0c0;
+      fill: #000;
       transition: fill 0.3s ease;
     }
-    #eye-icon:hover { fill: #ffffff; }
-
+    #eye-icon:hover {
+      fill: #000;
+    }
+    
     /* === Music Control Panel === */
     #music-controls {
       position: fixed;
@@ -249,14 +279,16 @@
       fill: #808080;
       transition: fill 0.3s ease;
     }
-    #speaker-icon:hover { fill: #ffffff; }
+    #speaker-icon:hover {
+      fill: #000;
+    }
     .mute-line {
       position: absolute;
       top: 50%;
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: #fff;
+      background-color: #000;
       opacity: 0;
       transform: translateY(-50%) rotate(45deg);
       transform-origin: center;
@@ -286,7 +318,7 @@
       border-radius: 50%;
       background: #fff;
       cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       transition: transform 0.2s;
       margin-top: -5px;
     }
@@ -304,25 +336,25 @@
       border-radius: 50%;
       background: #fff;
       cursor: pointer;
-      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
       transition: transform 0.2s;
     }
     #volume-slider::-moz-range-thumb:hover {
       transform: scale(1.1);
     }
-
+    
     /* === Copy Popup === */
     #copy-popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(255,255,255,0.2);
+      background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(8px);
       color: #000;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
@@ -355,24 +387,26 @@
     
     /* === Store UI Styles === */
     .store-container {
-      background: rgba(30,30,30,0.3);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(12px);
       padding: 15px 20px;
       border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(255,255,255,0.1);
-      color: #d3d3d3;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      color: #000;
       transition: opacity 0.5s ease;
       opacity: 0.8;
       text-align: center;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(0,0,0,0.1);
     }
-    .store-container:hover { opacity: 1; }
+    .store-container:hover {
+      opacity: 1;
+    }
     .store-text {
       font-size: 16px;
       margin-bottom: 10px;
     }
     .store-button {
-      background: rgba(30,30,30,0.3);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(12px);
       border: none;
       border-radius: 10px;
@@ -383,12 +417,12 @@
       margin: 0 auto;
     }
     .store-button:hover {
-      background: rgba(30,30,30,0.5);
+      background: rgba(255, 255, 255, 1);
     }
     .store-button svg {
       width: 24px;
       height: 24px;
-      fill: #ffffff;
+      fill: #000;
     }
   </style>
 </head>
@@ -398,7 +432,7 @@
     <source src="https://r2.guns.lol/6becc336-f8d1-4501-99c5-a1f84b4649eb.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
-
+  
   <!-- Music Control Panel -->
   <div id="music-controls">
     <div id="speaker-button">
@@ -411,29 +445,48 @@
     </div>
     <input type="range" id="volume-slider" min="0" max="100" value="70">
   </div>
-
+  
   <!-- Overlay (click to remove and activate sound) -->
   <div class="overlay" id="overlay">
     <div class="message">click</div>
   </div>
-
-  <!-- Badge (replacing the Mines Game) -->
-  <div class="badge">Official</div>
-
+  
   <!-- Center Stack: Main Container and Store Container -->
   <div class="center-stack">
     <!-- Main Container (Center Window) -->
     <div class="main-container" id="main-container">
-      <div class="title">dx9g</div>
-      <!-- Discord Profile Section -->
-      <div class="discord-profile">
-        <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/25bf4a2a4b90e7b7628df6af3b9638ec?size=1024" alt="Discord Avatar">
-        <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
+      <div class="header-section">
+        <div class="profile-picture">
+          <div class="discord-profile">
+            <img class="discord-avatar" src="https://cdn.discordapp.com/avatars/1141808506970837015/25bf4a2a4b90e7b7628df6af3b9638ec?size=1024" alt="Discord Avatar">
+            <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
+          </div>
+        </div>
+        <div class="user-info">
+          <div class="username-row">
+            <span class="username">dx9g</span>
+            <!-- Rich badge -->
+            <span class="user-badge" id="badge-rich">
+              <span class="badge-icon">$</span>
+              <span class="tooltip">rich</span>
+            </span>
+            <!-- Verified badge -->
+            <span class="user-badge" id="badge-verified">
+              <span class="badge-icon">&#10004;</span>
+              <span class="tooltip">verified</span>
+            </span>
+            <!-- Premium badge -->
+            <span class="user-badge" id="badge-premium">
+              <span class="badge-icon">&#9830;</span>
+              <span class="tooltip">premium</span>
+            </span>
+          </div>
+          <div class="bio">
+            <span id="bio-typing"></span>
+          </div>
+        </div>
       </div>
-      <!-- Bio with Animated Text -->
-      <div class="bio">
-        <span id="bio-typing"></span>
-      </div>
+      
       <!-- Social Links -->
       <div class="social-links">
         <div class="social-icon" id="discord-copy">
@@ -449,32 +502,32 @@
           <div class="tooltip">izvees</div>
         </div>
       </div>
+      
       <!-- Visitor Counter -->
       <div id="visitor-counter">
-        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#c0c0c0">
+        <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path d="M12 4.5C7.305 4.5 3.06 7.25 1 12c2.06 4.75 6.305 7.5 11 7.5s8.94-2.75 11-7.5c-2.06-4.75-6.305-7.5-11-7.5zM12 17c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5zm0-8a3 3 0 100 6 3 3 0 000-6z"/>
         </svg>
         <span id="visitor-count">0</span>
       </div>
     </div>
-
+    
     <!-- Store Container (Cheap Roblox Accounts) -->
     <div class="store-container">
       <div class="store-text">buy cheap roblox accounts</div>
       <a href="https://cheaprobloxaccounts.sellsn.io/" target="_blank">
         <button class="store-button">
-          <!-- Shopping Cart Icon (centered) -->
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 576 512">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
             <path d="M528.12 301.319l47.273-208C579.413 78.517 565.261 64 546.058 64H128L120.586 24.064A24 24 0 0097.246 0H24A24 24 0 000 24v16a24 24 0 0024 24h48.002l70.258 307.347a63.992 63.992 0 0061.483 44.653h248.032a63.992 63.992 0 0061.483-44.653zM160 448a32 32 0 1132-32 32 32 0 01-32 32zm320 0a32 32 0 1132-32 32 32 0 01-32 32z"/>
           </svg>
         </button>
       </a>
     </div>
   </div>
-
+  
   <!-- Hidden Background Music -->
   <audio id="background-music" src="https://r2.guns.lol/d7169975-b312-4c2c-9ef1-943cf96ae399.mp3" loop></audio>
-
+  
   <!-- Copy Popup -->
   <div id="copy-popup">
     <div>Copied to clipboard</div>
@@ -485,7 +538,7 @@
       okay
     </button>
   </div>
-
+  
   <!-- === JavaScript for Effects & Other Interactions === -->
   <script>
     // Overlay: Click to remove and start background music.
@@ -497,7 +550,7 @@
       overlay.classList.add('hidden');
       setTimeout(() => { overlay.remove(); }, 500);
     });
-
+    
     // Speaker toggle.
     const speakerButton = document.getElementById('speaker-button');
     let isMuted = false;
@@ -507,7 +560,7 @@
       bgMusic.muted = isMuted;
       speakerButton.classList.toggle('muted', isMuted);
     });
-
+    
     // Tilt effect for the main container.
     const mainContainer = document.getElementById('main-container');
     let targetRotationX = 0, targetRotationY = 0;
@@ -532,7 +585,7 @@
       requestAnimationFrame(animateTilt);
     }
     animateTilt();
-
+    
     // Clipboard copy & popup function.
     function copyUsername(username) {
       navigator.clipboard.writeText(username).then(() => {
@@ -545,7 +598,7 @@
     document.getElementById('discord-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('github-copy').addEventListener('click', () => { copyUsername("dx9g"); });
     document.getElementById('roblox-copy').addEventListener('click', () => { copyUsername("acceptedapoIogies"); });
-
+    
     // Volume slider.
     const volumeSlider = document.getElementById('volume-slider');
     volumeSlider.addEventListener('input', function() {
@@ -553,7 +606,7 @@
       const bgMusic = document.getElementById('background-music');
       if(bgMusic) { bgMusic.volume = vol; }
     });
-
+    
     // Animate bio text (typewriter effect).
     function animateBioTexts(element, texts) {
       let index = 0;
@@ -585,7 +638,7 @@
     const bioTexts = ["hey", "obsessed with money", "https://cheaprobloxaccounts.sellsn.io"];
     const bioTyping = document.getElementById('bio-typing');
     animateBioTexts(bioTyping, bioTexts);
-
+    
     // Title Typing Animation Script
     (function animateTitle() {
       const fullText = "@dx9g";
@@ -615,12 +668,12 @@
       updateTitle();
     })();
   </script>
-
+  
   <!-- === Firebase Realtime Database Integration for Views === -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getDatabase, ref, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-database.js";
-
+    
     const firebaseConfig = {
       apiKey: "AIzaSyA-faGgVBFXHFVjzOV0n6rKAibDTYUoYm0",
       authDomain: "dx9g-ce4b8.firebaseapp.com",
@@ -631,7 +684,7 @@
       appId: "1:353468434618:web:35730c977f79388ca85a83",
       measurementId: "G-JXZ5KSV7LX"
     };
-
+    
     const fbApp = initializeApp(firebaseConfig);
     const db = getDatabase(fbApp);
     const viewsRef = ref(db, "views");
