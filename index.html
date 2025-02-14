@@ -50,10 +50,11 @@
       opacity: 0;
       pointer-events: none;
     }
+    /* Reduced black glow for overlay message */
     .overlay .message {
       font-size: 48px;
       color: #000;
-      text-shadow: 0 0 8px #000, 0 0 10px #000;
+      text-shadow: 0 0 4px #000, 0 0 5px #000;
     }
     
     /* Body Layout */
@@ -250,7 +251,6 @@
       min-height: 350px;
       transition: all 0.3s ease;
       will-change: transform;
-      /* Initialize with a brightness filter of 110% */
       filter: brightness(110%);
     }
     @media (max-width: 700px) {
@@ -288,7 +288,7 @@
     }
     .username {
       color: #000;
-      text-shadow: 0 0 8px #000;
+      text-shadow: 0 0 4px #000;
     }
     .user-badge {
       position: relative;
@@ -306,7 +306,7 @@
       width: 32px;
       height: 32px;
       color: #000;
-      text-shadow: 0 0 8px #000;
+      text-shadow: 0 0 4px #000;
     }
     #badge-rich .badge-icon {
       font-size: 32px;
@@ -317,6 +317,7 @@
       width: 32px;
       height: 32px;
     }
+    /* Reduced drop-shadow for verified badge */
     #badge-verified svg {
       width: 20px;
       height: 20px;
@@ -325,7 +326,7 @@
       stroke-width: 3;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: drop-shadow(0 0 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.8));
+      filter: drop-shadow(0 0 3px rgba(0,0,0,0.9)) drop-shadow(0 0 5px rgba(0,0,0,0.8));
     }
     .user-badge .tooltip {
       position: absolute;
@@ -352,7 +353,7 @@
       min-height: 24px;
       line-height: 24px;
       color: #000;
-      text-shadow: 0 0 8px #000;
+      text-shadow: 0 0 4px #000;
     }
     
     /* Discord Profile & Decoration */
@@ -393,7 +394,8 @@
       width: 40px;
       height: 40px;
       transition: transform 0.3s;
-      filter: drop-shadow(0 0 6px black);
+      /* Reduced glow: from 6px to 3px */
+      filter: drop-shadow(0 0 3px black);
     }
     .social-icon:hover img {
       transform: scale(1.1);
@@ -445,7 +447,8 @@
       width: 24px;
       height: 24px;
       fill: #000;
-      filter: drop-shadow(0 0 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.8));
+      /* Reduced drop-shadow for eye icon */
+      filter: drop-shadow(0 0 3px rgba(0,0,0,0.9)) drop-shadow(0 0 5px rgba(0,0,0,0.8));
       transition: fill 0.3s ease;
     }
     #eye-icon:hover {
@@ -453,7 +456,7 @@
     }
     #visitor-count {
       color: #000;
-      text-shadow: 0 0 8px #000, 0 0 10px #000;
+      text-shadow: 0 0 4px #000, 0 0 5px #000;
     }
     
     /* Copy Popup - Transparent & Blurred */
@@ -561,7 +564,7 @@
               <span class="tooltip">rich</span>
             </span>
             <span class="user-badge" id="badge-verified">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.8));">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 3px rgba(0,0,0,0.9)) drop-shadow(0 0 5px rgba(0,0,0,0.8));">
                 <polyline points="20 6 9 17 4 12" />
               </svg>
               <span class="tooltip">verified</span>
