@@ -70,7 +70,95 @@
       position: relative;
     }
     
-    /* Center Stack: Contains main & store containers; centered horizontally */
+    /* Music Control Panel (moved to top left) */
+    #music-controls {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      padding: 8px 12px;
+      border-radius: 10px;
+      z-index: 10000;
+    }
+    #speaker-button {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+    #speaker-icon {
+      width: 24px;
+      height: 24px;
+      fill: #808080;
+      transition: fill 0.3s ease;
+    }
+    #speaker-icon:hover {
+      fill: #fff;
+    }
+    .mute-line {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #fff;
+      opacity: 0;
+      transform: translateY(-50%) rotate(45deg);
+      transform-origin: center;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #speaker-button.muted .mute-line {
+      opacity: 1;
+    }
+    #volume-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 120px;
+      height: 6px;
+      background: transparent;
+      outline: none;
+    }
+    #volume-slider::-webkit-slider-runnable-track {
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
+    }
+    #volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+      margin-top: -5px;
+    }
+    #volume-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+    }
+    #volume-slider::-moz-range-track {
+      background: #ccc;
+      border-radius: 3px;
+      height: 6px;
+    }
+    #volume-slider::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 5px rgba(0,0,0,0.5);
+      transition: transform 0.2s;
+    }
+    #volume-slider::-moz-range-thumb:hover {
+      transform: scale(1.1);
+    }
+    
+    /* === Center Stack: Contains main & store containers === */
     .center-stack {
       display: flex;
       flex-direction: column;
@@ -80,8 +168,8 @@
     
     /* === Main Container (Center Window) === */
     .main-container {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(20,20,20,0.4);
+      backdrop-filter: blur(10px);
       padding: 30px 40px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -89,11 +177,11 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      border: 1px solid rgba(0,0,0,0.1);
-      color: #000;  /* All text here will be black */
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
     }
     
-    /* New header section inside the center window */
+    /* Header Section inside Center Window */
     .header-section {
       display: flex;
       align-items: center;
@@ -117,7 +205,7 @@
       font-weight: bold;
     }
     .username {
-      /* spacing already provided via gap */
+      /* Spacing provided via gap */
     }
     /* Badges next to the username */
     .user-badge {
@@ -129,10 +217,11 @@
       height: 24px;
       border-radius: 50%;
       background: transparent;
-      color: #fff; /* Badge icons are white */
+      color: #fff;
       font-size: 16px;
       cursor: default;
-      text-shadow: 0 0 8px #fff; /* glowing white effect */
+      /* Smooth glowing effect */
+      text-shadow: 0 0 8px #fff;
     }
     .user-badge .tooltip {
       position: absolute;
@@ -152,6 +241,10 @@
     .user-badge:hover .tooltip {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
+    }
+    /* Extra glowing style for verified badge */
+    #badge-verified {
+      box-shadow: 0 0 10px rgba(255,255,255,0.8);
     }
     
     /* Smaller bio text */
@@ -243,104 +336,16 @@
       align-items: center;
       gap: 5px;
       font-size: 16px;
-      color: #000;
+      color: #fff;
     }
     #eye-icon {
       width: 24px;
       height: 24px;
-      fill: #000;
+      fill: #fff;
       transition: fill 0.3s ease;
     }
     #eye-icon:hover {
-      fill: #000;
-    }
-    
-    /* === Music Control Panel === */
-    #music-controls {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: transparent;
-      padding: 8px 12px;
-      border-radius: 10px;
-      z-index: 10000;
-    }
-    #speaker-button {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
-    #speaker-icon {
-      width: 24px;
-      height: 24px;
-      fill: #808080;
-      transition: fill 0.3s ease;
-    }
-    #speaker-icon:hover {
-      fill: #000;
-    }
-    .mute-line {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: #000;
-      opacity: 0;
-      transform: translateY(-50%) rotate(45deg);
-      transform-origin: center;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-    #speaker-button.muted .mute-line {
-      opacity: 1;
-    }
-    #volume-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 120px;
-      height: 6px;
-      background: transparent;
-      outline: none;
-    }
-    #volume-slider::-webkit-slider-runnable-track {
-      background: #ccc;
-      border-radius: 3px;
-      height: 6px;
-    }
-    #volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-      transition: transform 0.2s;
-      margin-top: -5px;
-    }
-    #volume-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-    }
-    #volume-slider::-moz-range-track {
-      background: #ccc;
-      border-radius: 3px;
-      height: 6px;
-    }
-    #volume-slider::-moz-range-thumb {
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #fff;
-      cursor: pointer;
-      box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-      transition: transform 0.2s;
-    }
-    #volume-slider::-moz-range-thumb:hover {
-      transform: scale(1.1);
+      fill: #fff;
     }
     
     /* === Copy Popup === */
@@ -349,12 +354,12 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       backdrop-filter: blur(8px);
       color: #000;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
@@ -387,16 +392,16 @@
     
     /* === Store UI Styles === */
     .store-container {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(20,20,20,0.4);
+      backdrop-filter: blur(10px);
       padding: 15px 20px;
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      color: #000;
+      color: #fff;
       transition: opacity 0.5s ease;
       opacity: 0.8;
       text-align: center;
-      border: 1px solid rgba(0,0,0,0.1);
+      border: 1px solid rgba(255,255,255,0.1);
     }
     .store-container:hover {
       opacity: 1;
@@ -406,8 +411,8 @@
       margin-bottom: 10px;
     }
     .store-button {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(20,20,20,0.4);
+      backdrop-filter: blur(10px);
       border: none;
       border-radius: 10px;
       padding: 10px;
@@ -417,12 +422,12 @@
       margin: 0 auto;
     }
     .store-button:hover {
-      background: rgba(255, 255, 255, 1);
+      background: rgba(20,20,20,0.6);
     }
     .store-button svg {
       width: 24px;
       height: 24px;
-      fill: #000;
+      fill: #fff;
     }
   </style>
 </head>
@@ -433,7 +438,7 @@
     Your browser does not support the video tag.
   </video>
   
-  <!-- Music Control Panel -->
+  <!-- Music Control Panel (Top Left) -->
   <div id="music-controls">
     <div id="speaker-button">
       <svg id="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
