@@ -167,7 +167,7 @@
     
     /* Main Container (Center Window) */
     .main-container {
-      background: rgba(30,30,30,0.5); /* slightly brighter */
+      background: rgba(30,30,30,0.3); /* more transparent */
       backdrop-filter: blur(10px);
       padding: 30px 40px;
       border-radius: 20px;
@@ -176,7 +176,8 @@
       display: flex;
       flex-direction: column;
       position: relative;
-      border: 1px solid rgba(255,255,255,0.1);
+      /* Removed the white outline border */
+      /* border: 1px solid rgba(255,255,255,0.1); */
       color: #fff;
       min-height: 350px;
     }
@@ -225,7 +226,7 @@
       cursor: default;
       text-shadow: 0 0 8px #fff;
     }
-    /* Rich badge: 2x bigger */
+    /* Rich badge: 2x bigger with skinnier dollar */
     #badge-rich {
       width: 32px;
       height: 32px;
@@ -235,8 +236,9 @@
     #badge-rich .badge-icon {
       font-size: 32px;
       line-height: 32px;
+      transform: scaleX(0.8); /* Makes the dollar skinnier */
     }
-    /* Verified badge: now a standalone black checkmark (no circle) */
+    /* Verified badge: standalone black checkmark with increased stroke-width */
     #badge-verified {
       width: 32px;
       height: 32px;
@@ -246,7 +248,7 @@
       height: 20px;
       fill: none;
       stroke: #000;
-      stroke-width: 3; /* Increased from 2 to 3 for a fatter checkmark */
+      stroke-width: 3;
       stroke-linecap: round;
       stroke-linejoin: round;
       filter: drop-shadow(0 0 6px rgba(0,0,0,0.9)) drop-shadow(0 0 10px rgba(0,0,0,0.8));
@@ -317,6 +319,7 @@
       width: 40px;
       height: 40px;
       transition: transform 0.3s;
+      filter: drop-shadow(0 0 6px black); /* Black glowing effect */
     }
     .social-icon:hover img {
       transform: scale(1.1);
@@ -380,13 +383,13 @@
       text-shadow: 0 0 8px #000, 0 0 10px #000;
     }
     
-    /* Copy Popup */
+    /* Copy Popup - Transparent & Blurred */
     #copy-popup {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.8);
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0); /* fully transparent */
       backdrop-filter: blur(8px);
       color: #000;
       padding: 20px;
@@ -465,7 +468,7 @@
         <div class="user-info">
           <div class="username-row">
             <span class="username">dx9g</span>
-            <!-- Rich badge: black dollar sign, 2x bigger -->
+            <!-- Rich badge: black dollar sign, 2x bigger with skinnier style -->
             <span class="user-badge" id="badge-rich">
               <span class="badge-icon">$</span>
               <span class="tooltip">rich</span>
