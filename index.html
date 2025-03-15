@@ -13,22 +13,19 @@
     }
     * {
       font-family: 'Aoki Regular', sans-serif;
-      user-select: none;  /* Disable text selection */
+      user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
     }
-    /* Disable dragging for images, videos, svgs, etc. */
     img, video, svg {
       -webkit-user-drag: none;
       user-drag: none;
     }
-    
     /* Custom Cursor */
     body, * {
       cursor: url('https://r2.guns.lol/c46314a7-db2e-4905-94b8-414b438c409e.png') 16 16, auto;
     }
-    
     /* Background Video */
     .bg-video {
       position: fixed;
@@ -40,7 +37,6 @@
       z-index: -2;
       filter: brightness(0.70);
     }
-    
     /* Overlay */
     .overlay {
       position: fixed;
@@ -65,7 +61,6 @@
       color: #000;
       text-shadow: 0 0 8px #fff;
     }
-    
     /* Body Layout */
     body {
       margin: 0;
@@ -78,7 +73,6 @@
       overflow: hidden;
       position: relative;
     }
-    
     /* Music Control Panel (Top Left) */
     #music-controls {
       position: fixed;
@@ -164,7 +158,6 @@
     #volume-slider::-moz-range-thumb:hover {
       transform: scale(1.1);
     }
-    
     /* Brightness Controls (Top Right) */
     #brightness-controls {
       position: fixed;
@@ -230,7 +223,6 @@
     #brightness-slider::-moz-range-thumb:hover {
       transform: scale(1.1);
     }
-    
     /* Center Stack with perspective */
     .center-stack {
       display: flex;
@@ -239,7 +231,6 @@
       gap: 40px;
       perspective: 1000px;
     }
-    
     /* Main Container (Center Window) */
     .main-container {
       background: rgba(30,30,30,0.5);
@@ -254,7 +245,7 @@
       position: relative;
       color: #fff;
       min-height: 350px;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease, filter 0.3s ease;
       will-change: transform;
       filter: brightness(70%);
     }
@@ -266,7 +257,6 @@
     .spacer {
       flex: 1;
     }
-    
     /* Header Section */
     .header-section {
       display: flex;
@@ -325,7 +315,6 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    
     /* Badges next to username */
     .badges {
       display: flex;
@@ -377,7 +366,6 @@
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-    
     .user-info .bio {
       font-size: 14px;
       margin-top: 4px;
@@ -386,7 +374,6 @@
       color: #000;
       text-shadow: 0 0 8px #fff;
     }
-    
     /* Discord Profile & Decoration */
     .discord-profile {
       position: relative;
@@ -407,7 +394,6 @@
       height: 80px;
       pointer-events: none;
     }
-    
     /* Roblox Avatar Container */
     .roblox-avatar-container {
       display: flex;
@@ -420,7 +406,6 @@
       height: auto;
       background: none;
     }
-    
     /* Social Links (Bottom) */
     .social-links {
       display: flex;
@@ -475,7 +460,6 @@
       border-color: transparent transparent #cccccc transparent;
       opacity: 0.8;
     }
-    
     /* Visitor Counter */
     #visitor-counter {
       position: absolute;
@@ -498,7 +482,6 @@
     #eye-icon:hover {
       fill: #000;
     }
-    
     /* Additional White Glow for Content Elements */
     .main-container,
     .header-section,
@@ -519,7 +502,6 @@
     .discord-decoration {
       filter: drop-shadow(0 0 8px #fff);
     }
-    
     /* Exclude UI controls (like slider thumbs) from the glow */
     #volume-slider::-webkit-slider-thumb,
     #volume-slider::-moz-range-thumb,
@@ -532,7 +514,7 @@
 </head>
 <body>
   <!-- Background video -->
-  <video class="bg-video" autoplay muted loop>
+  <video class="bg-video" autoplay muted loop playsinline>
     <source src="https://r2.guns.lol/6becc336-f8d1-4501-99c5-a1f84b4649eb.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
@@ -590,17 +572,14 @@
             </span>
             <!-- Badges Container -->
             <div class="badges">
-              <!-- Premium Badge Container with Tooltip -->
               <div class="badge-container">
                 <img class="badge" src="https://cdn-icons-png.flaticon.com/512/20/20227.png" alt="Premium Badge">
                 <div class="badge-tooltip">premium</div>
               </div>
-              <!-- Roblox Premium Badge Container with Tooltip -->
               <div class="badge-container">
                 <img class="badge" src="https://vectorseek.com/wp-content/uploads/2023/07/Roblox-Premium-Logo-Vector.svg-.png" alt="Roblox Premium Badge">
                 <div class="badge-tooltip">roblox premium</div>
               </div>
-              <!-- Verified Badge Container with Tooltip -->
               <div class="badge-container">
                 <img class="badge" src="https://www.freeiconspng.com/uploads/check-mark-in-black-icon-8.png" alt="Verified Badge">
                 <div class="badge-tooltip">verified</div>
@@ -632,7 +611,6 @@
         </div>
         <div class="social-icon" id="roblox-copy">
           <img src="https://i.imgflip.com/7nwenp.png" alt="Roblox">
-          <!-- Changed tooltip text from "izvees" to "liarIiarIiarIiarIiar" -->
           <div class="tooltip">liarIiarIiarIiarIiar</div>
         </div>
       </div>
@@ -652,7 +630,7 @@
   
   <!-- JavaScript for Effects & Interactions -->
   <script>
-    // Prevent right-click, copy, and drag events for complete protection.
+    // Prevent right-click, copy, and drag events.
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
     document.addEventListener('dragstart', e => e.preventDefault());
@@ -677,12 +655,10 @@
       speakerButton.classList.toggle('muted', isMuted);
     });
     
-    // Improved tilt effect for the main container
+    // Optimized tilt effect using CSS transitions
     const mainContainer = document.getElementById('main-container');
-    let targetRotationX = 0, targetRotationY = 0;
-    let currentRotationX = 0, currentRotationY = 0;
     const maxTilt = 15;
-    const dampening = 0.2;
+    mainContainer.style.transition = 'transform 0.2s ease-out';
     
     mainContainer.addEventListener('mousemove', (e) => {
       const rect = mainContainer.getBoundingClientRect();
@@ -690,20 +666,14 @@
       const centerY = rect.height / 2;
       const offsetX = (e.clientX - (rect.left + centerX)) / centerX;
       const offsetY = (centerY - (e.clientY - rect.top)) / centerY;
-      targetRotationY = offsetX * maxTilt;
-      targetRotationX = offsetY * maxTilt;
+      const rotationY = offsetX * maxTilt;
+      const rotationX = offsetY * maxTilt;
+      mainContainer.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
+    
     mainContainer.addEventListener('mouseleave', () => {
-      targetRotationX = 0;
-      targetRotationY = 0;
+      mainContainer.style.transform = `rotateX(0deg) rotateY(0deg)`;
     });
-    function animateTilt() {
-      currentRotationX += (targetRotationX - currentRotationX) * dampening;
-      currentRotationY += (targetRotationY - currentRotationY) * dampening;
-      mainContainer.style.transform = `rotateX(${currentRotationX}deg) rotateY(${currentRotationY}deg)`;
-      requestAnimationFrame(animateTilt);
-    }
-    animateTilt();
     
     // Brightness slider functionality
     const brightnessSlider = document.getElementById('brightness-slider');
