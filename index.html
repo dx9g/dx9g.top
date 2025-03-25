@@ -668,17 +668,17 @@
       const offsetY = (centerY - (e.clientY - rect.top)) / centerY;
       const rotationY = offsetX * maxTilt;
       const rotationX = offsetY * maxTilt;
-      mainContainer.style.transform = rotateX(${rotationX}deg) rotateY(${rotationY}deg);
+      mainContainer.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
     });
     
     mainContainer.addEventListener('mouseleave', () => {
-      mainContainer.style.transform = rotateX(0deg) rotateY(0deg);
+      mainContainer.style.transform = `rotateX(0deg) rotateY(0deg)`;
     });
     
     // Brightness slider functionality
     const brightnessSlider = document.getElementById('brightness-slider');
     brightnessSlider.addEventListener('input', function() {
-      mainContainer.style.filter = brightness(${this.value}%);
+      mainContainer.style.filter = `brightness(${this.value}%)`;
     });
     
     // Social icons open new tabs with profile links
