@@ -380,9 +380,7 @@
       width: 80px;
       height: 80px;
     }
-    /* Używamy elementu <picture> dla kompatybilności */
-    .discord-profile picture,
-    .discord-profile img {
+    .discord-avatar {
       width: 80px;
       height: 80px;
       border-radius: 50%;
@@ -562,12 +560,7 @@
       <div class="header-section">
         <div class="profile-picture">
           <div class="discord-profile">
-            <!-- Użycie elementu <picture> dla lepszej kompatybilności -->
-            <picture>
-              <source srcset="https://media.discordapp.net/attachments/858846723127377951/1327005683425476700/f2eb2b69a7e1d8d516c736f9abd97ade.webp" type="image/webp">
-              <source srcset="https://media.discordapp.net/attachments/858846723127377951/1327005683425476700/f2eb2b69a7e1d8d516c736f9abd97ade.jpg" type="image/jpeg">
-              <img class="discord-avatar" src="https://media.discordapp.net/attachments/903007497122639925/1350386957972279326/IMG_2831.jpg?ex=67e3bc5b&is=67e26adb&hm=edb588b108f6bc14ebfb9ebcb721cea1f02e46231856d2b25c80a1d2280a2d80&=&format=webp&width=960&height=960" alt="Discord Avatar">
-            </picture>
+            <img class="discord-avatar" src="https://media.discordapp.net/attachments/903007497122639925/1350386957972279326/IMG_2831.jpg?ex=67e3bc5b&is=67e26adb&hm=edb588b108f6bc14ebfb9ebcb721cea1f02e46231856d2b25c80a1d2280a2d80&=&format=webp&width=960&height=960" alt=" ">
             <img class="discord-decoration" src="https://cdn.discordapp.com/avatar-decoration-presets/a_c3cffc19e9784f7d0b005eecdf1b566e.png" alt="Discord Decoration">
           </div>
         </div>
@@ -675,17 +668,17 @@
       const offsetY = (centerY - (e.clientY - rect.top)) / centerY;
       const rotationY = offsetX * maxTilt;
       const rotationX = offsetY * maxTilt;
-      mainContainer.style.transform = `rotateX(${rotationX}deg) rotateY(${rotationY}deg)`;
+      mainContainer.style.transform = rotateX(${rotationX}deg) rotateY(${rotationY}deg);
     });
     
     mainContainer.addEventListener('mouseleave', () => {
-      mainContainer.style.transform = `rotateX(0deg) rotateY(0deg)`;
+      mainContainer.style.transform = rotateX(0deg) rotateY(0deg);
     });
     
     // Brightness slider functionality
     const brightnessSlider = document.getElementById('brightness-slider');
     brightnessSlider.addEventListener('input', function() {
-      mainContainer.style.filter = `brightness(${this.value}%)`;
+      mainContainer.style.filter = brightness(${this.value}%);
     });
     
     // Social icons open new tabs with profile links
